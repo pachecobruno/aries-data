@@ -8,7 +8,7 @@
     "dev": "DEBUG=aries:* node ."
   },
   "bin": {
-    "aries": "./lib/cli/aries.js"
+    "aries": "./lib/boot/cli/aries.js"
   },
   "keywords": [],
   "author": "",
