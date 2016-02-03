@@ -11,7 +11,7 @@
     "aries": "./lib/boot/cli/aries.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "schnie",
   "license": "ISC",
   "dependencies": {
     "assert": "^1.3.0",
