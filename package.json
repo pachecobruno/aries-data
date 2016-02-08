@@ -2,10 +2,11 @@
   "name": "astronomer-aries",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "DEBUG=aries:* node ."
+    "clean": "rm -rf dist",
+    "build": "npm run clean && babel lib -d dist"
   },
   "bin": {
     "aries": "./lib/boot/cli/aries.js"
