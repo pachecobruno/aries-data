@@ -154,9 +154,9 @@ exports.default = _stampit2.default.init(function () {
     scheduleActivity: function scheduleActivity(attrs) {
         return {
             decisionType: 'ScheduleActivityTask',
-            scheduleActivityTaskDecisionAttributes: Object.assign(attrs, {
+            scheduleActivityTaskDecisionAttributes: Object.assign({
                 taskList: { name: this.taskList + '-activities' }
-            })
+            }, attrs)
         };
     },
 
@@ -172,9 +172,9 @@ exports.default = _stampit2.default.init(function () {
     continueAsNewWorkflowExecution: function continueAsNewWorkflowExecution(attrs) {
         return {
             decisionType: 'ContinueAsNewWorkflowExecution',
-            continueAsNewWorkflowExecutionDecisionAttributes: Object.assign(attrs, {
+            continueAsNewWorkflowExecutionDecisionAttributes: Object.assign({
                 taskList: { name: this.taskList }
-            })
+            }, attrs)
         };
     },
 
