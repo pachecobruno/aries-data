@@ -1,6 +1,6 @@
 # aries
 
-Aries is a library and CLI that makes it easy to create and run multi-stage workflows written in javascript (es2015/2016), preferably in a distributed cloud environment.  Aries currently supports [Amazon SWF](https://aws.amazon.com/swf/details/) but can evolve to support other services.
+Aries is a library and CLI that makes it easy to create and run multi-stage workflows written in javascript (es2015/2016), preferably in a distributed cloud environment.  Aries currently supports [Amazon SWF](https://aws.amazon.com/swf/details/) but can evolve to support other services, or some future custom implementation.
 
 ## Terminology
 - Decider - The decider is a module that recieves workflow events from SWF, and makes decisions on what to do next.  This can include things like completing/failing the workflow, setting timers, rescheduling the workflow to run again, and scheduling activities to be executed.
@@ -62,10 +62,13 @@ The steps before the final load of the data, typically produce output files and 
 
 Currently, `onTask` should only return strings, or `undefined` and it is usually an s3 object key.
 
+#### Testing
+For consistency, all activites should use [tape](https://github.com/substack/tape) for testing.  You should split the functionality and logic of your integration into separate functions on your activity.  These functions should be pure and operate on nothing but its input values, then return some result that can be tested.  Ideally, your `onTask` function should just be the glue between the other testable functions of your activity.
+- `npm run test`
 
 ## Roadmap
 - [ ] Better support for JSON serialization for `onTask` return values.  Some activities might need to output multiple files as its output, and other activities may need to recieve multiple file names.
 - [ ] Abstractions around s3 file uploads.  This could be a `@s3Result` decorator that automatically takes the returned value, uploads/streams it to s3, and returns a JSON object containing s3 keys.  It could also just be a special type of `s3Result` object that wraps the return value(s).
 - [ ] More flexible error handling.
-- [ ] CLI tooling to create/work with activities.
+- [ ] CLI tooling to create/test/work with activities.
 - [ ] Support for more SWF primitives.
