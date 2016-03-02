@@ -8,7 +8,7 @@ Aries is a library and CLI that makes it easy to create and run multi-stage work
 - Activity - Activities are modules that implement a specific task, that will typically make up a larger workflow.  Activities should be small and not try to do too much, although they can be long running.
 
 ## Creating new activities
-First browse through a couple of examples in the [aries-activities org](https://github.com/aries-activities)
+First browse through a couple of examples in the [aries-activities org](https://github.com/aries-activities).
 In the future, the aries CLI will include commands to generate and boilerplate activities, but for now its a manual process.
 
 #### Create a new aries-activity project
