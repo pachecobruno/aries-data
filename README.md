@@ -78,3 +78,4 @@ Workflows are not limited in the amount of activities required.  The typical wor
 - [ ] More flexible error handling.
 - [ ] CLI tooling to create/test/work with activities.
 - [ ] Support for more SWF primitives.
+- [ ] Support for running multiple jobs concurrently, up to threshold.
