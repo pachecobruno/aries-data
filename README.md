@@ -65,6 +65,7 @@ Currently, `onTask` should only return strings, or `undefined` and it is usually
 
 ## Roadmap
 - [ ] Better support for JSON serialization for `onTask` return values.  Some activities might need to output multiple files as its output, and other activities may need to recieve multiple file names.
-- [ ] Abstractions around s3 file uploads.  This could be a `@s3Result` decorator that automatically takes the returned value, uploads/streams it to s3, and returns a JSON object containing s3 keys.
+- [ ] Abstractions around s3 file uploads.  This could be a `@s3Result` decorator that automatically takes the returned value, uploads/streams it to s3, and returns a JSON object containing s3 keys.  It could also just be a special type of `s3Result` object that wraps the return value(s).
 - [ ] More flexible error handling.
 - [ ] CLI tooling to create/work with activities.
+- [ ] Support for more SWF primitives.
