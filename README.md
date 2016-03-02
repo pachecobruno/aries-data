@@ -25,7 +25,7 @@ Your project name should always start with `aries-activity-`.  This prefix is us
 `npm install --save astronomer-aries`
 
 #### Boilerplate
-- Set main in `package.json ` to `lib/index.js`.
+- Set `main` in `package.json ` to `lib/index.js`.
 - Add test command to `package.json` scripts.  This uses `babel-node` to execute tests written with [tape](https://github.com/substack/tape) and pipes the TAP output through [faucet](https://github.com/substack/faucet)
 `DEBUG=aries:* NODE_PATH=. babel-node --presets es2015,stage-3 test/test.js | faucet`
 
@@ -56,7 +56,7 @@ The `onTask` function is called with two parameters, `activityTask` and `config`
 `config` is an aribitrary configuration object for a particular execution of this task.  Activity tasks should be as generic as possible, but configuarable using this parameter.  In the astronomer cloud, this object will be created and updated by users in the UI.  In development, this should be a mocked object passed in by your test.
 `lastExecuted` is the date this particular activity was executed as a part of the currently running workflow.
 
-#### Task implementation
+#### `onTask` implementation
 Workflows should be broken out into small, managable pieces that don't try to do to much.  A typical workflow might have three steps.  (1) Extract, or query for some data that exists in a database, or API.  (2) Transform the output into a format that the destination can work with.  (3) Load the resulting file of the last steps into a destination database.  A workflow like this would have three activities, one for each step.
 
 The steps before the final load of the data, typically produce output files and load them to s3, for the next task to pick up and work with.  The returned value of `onTask` is passed in as the input.  Activities in the middle of the workflow can access these intermediate output files using `activityTask.input` to get the string that was returned from the previous activities `onTask`.
@@ -66,6 +66,11 @@ Currently, `onTask` should only return strings, or `undefined` (no return value)
 #### Testing
 For consistency, all activites should use [tape](https://github.com/substack/tape) for testing.  You should split the functionality and logic of your integration into separate functions on your activity.  These functions should be pure and operate on nothing but its input values, then return some result that can be tested.  Ideally, your `onTask` function should just be the glue between the other testable functions of your activity.
 - `npm run test`
+
+#### Putting it all together
+Typically, adding a new "integration" may only involve writing a single activity that will be chained to already existing activities to produce the desired workflow.  For example, if you need to get salesforece API data to redshift, you should only need to write the `aries-activity-salesforce-source` activity.  When running as a workflow, your new `aries-activity-salesforce-source` could read data from salesforce and write the json response objects to an s3 object.  The next activity, `aries-activity-json-to-csv` could transform the data from json objects to csv, and load the result to a new s3 object.  Finally, `aries-activity-redshift-sink` could use the csv output and efficiently load the data using the `COPY` command.
+
+Workflows are not limited in the amount of activities required.  The typical workflow is three steps, but as the project evolves, workflows could contain many steps, with new features like transformations, and enrichment.  They could even branch and take multiple paths, working on things concurrently.
 
 ## Roadmap
 - [ ] Better support for JSON serialization for `onTask` return values.  Some activities might need to output multiple files as its output, and other activities may need to recieve multiple file names.
