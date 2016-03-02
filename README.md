@@ -41,3 +41,4 @@ export default activity.props({
     },
 });
 ```
+The default export of your module should be your new activity, which extends the `activity` that is provided by aries.  There are two things required for every activity - the configuration (name/version), and the `onTask` function.  The name and version are used under the hood by SWF when we need to deprecate old activity versions and start using new versions.
