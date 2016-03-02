@@ -25,6 +25,7 @@ Your project name should always start with `aries-activity-`.  This prefix is us
 `npm install --save astronomer-aries`
 
 #### Boilerplate
+- Set main in `package.json ` to `lib/index.js`.
 - Add test command to `package.json` scripts.  This uses `babel-node` to execute tests written with [tape](https://github.com/substack/tape) and pipes the TAP output through [faucet](https://github.com/substack/faucet)
 `DEBUG=aries:* NODE_PATH=. babel-node --presets es2015,stage-3 test/test.js | faucet`
 
