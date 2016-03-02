@@ -41,4 +41,10 @@ export default activity.props({
     },
 });
 ```
-The default export of your module should be your new activity, which extends the `activity` that is provided by aries.  There are two things required for every activity - the configuration (name/version), and the `onTask` function.  The name and version are used under the hood by SWF when we need to deprecate old activity versions and start using new versions.
+The default export of your module should be your new activity, which extends the `activity` that is provided by aries.  There are two things required for every activity - the configuration (name/version), and the `onTask` function.  The name and version are used under the hood by SWF when we need to deprecate old activity versions and start using new versions.  The current best practice is to `require` the values provided in `package.json` to keep them consistent.
+
+The `onTask` function is called with two parameters, `activityTask` and `config` by default.  In the astronomer cloud, a third parameter, `lastExecuted` is also provided.
+
+`activityTask` is the raw data provided by SWF, when [polling for activity tasks](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/SWF.html#pollForActivityTask-property)
+`config` is an aribitrary configuration object for a particular execution of this task.  Activity tasks should be as generic as possible, but configuarable using this parameter.  In the astronomer cloud, this object will be created and updated by users in the UI.  In development, this should be a mocked object passed in by your test.
+`lastExecuted` is the date this particular activity was executed as a part of the currently running workflow.
