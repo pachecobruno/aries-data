@@ -48,3 +48,8 @@ The `onTask` function is called with two parameters, `activityTask` and `config`
 `activityTask` is the raw data provided by SWF, when [polling for activity tasks](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/SWF.html#pollForActivityTask-property)
 `config` is an aribitrary configuration object for a particular execution of this task.  Activity tasks should be as generic as possible, but configuarable using this parameter.  In the astronomer cloud, this object will be created and updated by users in the UI.  In development, this should be a mocked object passed in by your test.
 `lastExecuted` is the date this particular activity was executed as a part of the currently running workflow.
+
+#### Task implementation
+Workflows should be broken out into small, managable pieces that don't try to do to much.  A typical workflow might have three steps.  (1) Extract, or query for some data that exists in a database, or API.  (2) Transform the output into a format that the destination can work with.  (3) Load the product of the last steps into a destination database.  A workflow like this would have three activities, one for each piece.
+
+The steps before the final load of the data, typically produce output files and load them to s3, for the next task to pick up and work with.  The returned value of a task is passed in as the input (`activityTask.input`) to the next task.
