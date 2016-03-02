@@ -60,7 +60,7 @@ Workflows should be broken out into small, managable pieces that don't try to do
 
 The steps before the final load of the data, typically produce output files and load them to s3, for the next task to pick up and work with.  The returned value of `onTask` is passed in as the input.  Activities in the middle of the workflow can access these intermediate output files using `activityTask.input` to get the string that was returned from the previous activities `onTask`.
 
-Currently, `onTask` should only return strings, or `undefined` and it is usually an s3 object key.
+Currently, `onTask` should only return strings, or `undefined` (no return value) and it is usually an s3 object key.
 
 #### Testing
 For consistency, all activites should use [tape](https://github.com/substack/tape) for testing.  You should split the functionality and logic of your integration into separate functions on your activity.  These functions should be pure and operate on nothing but its input values, then return some result that can be tested.  Ideally, your `onTask` function should just be the glue between the other testable functions of your activity.
