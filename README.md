@@ -3,13 +3,19 @@
 Aries is a library and CLI that makes it easy to create and run multi-stage workflows written in javascript (es2015/2016), preferably in a distributed cloud environment.  Aries currently supports [Amazon SWF](https://aws.amazon.com/swf/details/) but can evolve to support other services.
 
 ## Terminology
-- Decider - The decider is a module that recieves workflow events from SWF, and makes decisions on what to do next.  This can include things like Completing/Failing the workflow, as well as scheduling activities to be executed.
+- Decider - The decider is a module that recieves workflow events from SWF, and makes decisions on what to do next.  This can include things like completing/failing the workflow, setting timers, rescheduling the workflow to run again, and scheduling activities to be executed.
 
 - Activity - Activities are modules that implement a specific task, that will typically make up a larger workflow.  Activities should be small and not try to do too much, although they can be long running.
 
 ## Creating new activities
 First browse through a couple of examples in the [aries-activities org](https://github.com/aries-activities)
 In the future, the aries CLI will include commands to generate and boilerplate activities, but for now its a manual process.
+
+#### Create a new aries-activity project
+Your project name should always start with `aries-activity-`.  This prefix is used to tell babel to transform this module when running in the cloud, rather than having to maintain a built version within each activity repository.
+- `mkdir aries-activity-awesomedb-source && cd $_`
+- `npm init -y`
+- `git init`
 
 #### Install dependencies
 - Install compatible versions of babel packages as well as some testing tools.
@@ -50,6 +56,15 @@ The `onTask` function is called with two parameters, `activityTask` and `config`
 `lastExecuted` is the date this particular activity was executed as a part of the currently running workflow.
 
 #### Task implementation
-Workflows should be broken out into small, managable pieces that don't try to do to much.  A typical workflow might have three steps.  (1) Extract, or query for some data that exists in a database, or API.  (2) Transform the output into a format that the destination can work with.  (3) Load the product of the last steps into a destination database.  A workflow like this would have three activities, one for each piece.
+Workflows should be broken out into small, managable pieces that don't try to do to much.  A typical workflow might have three steps.  (1) Extract, or query for some data that exists in a database, or API.  (2) Transform the output into a format that the destination can work with.  (3) Load the resulting file of the last steps into a destination database.  A workflow like this would have three activities, one for each step.
 
-The steps before the final load of the data, typically produce output files and load them to s3, for the next task to pick up and work with.  The returned value of a task is passed in as the input (`activityTask.input`) to the next task.
+The steps before the final load of the data, typically produce output files and load them to s3, for the next task to pick up and work with.  The returned value of `onTask` is passed in as the input.  Activities in the middle of the workflow can access these intermediate output files using `activityTask.input` to get the string that was returned from the previous activities `onTask`.
+
+Currently, `onTask` should only return strings, or `undefined` and it is usually an s3 object key.
+
+
+## Roadmap
+[] Better support for JSON serialization for `onTask` return values.  Some activities might need to output multiple files as its output, and other activities may need to recieve multiple file names.
+[] Abstractions around s3 file uploads.  This could be a `@s3Result` decorator that automatically takes the returned value, uploads/streams it to s3, and returns a JSON object containing s3 keys.
+[] More flexible error handling.
+[] CLI tooling to create/work with activities.
