@@ -9,9 +9,7 @@ var _assert = require('assert');
 
 var _assert2 = _interopRequireDefault(_assert);
 
-var _client = require('../swf/client');
-
-var _client2 = _interopRequireDefault(_client);
+var _aws = require('../util/aws');
 
 var _decisionPoller = require('../swf/decisionPoller');
 
@@ -24,6 +22,10 @@ var _activityPoller2 = _interopRequireDefault(_activityPoller);
 var _registerActivity = require('../swf/registerActivity');
 
 var _registerActivity2 = _interopRequireDefault(_registerActivity);
+
+var _activity = require('../swf/activity');
+
+var _activity2 = _interopRequireDefault(_activity);
 
 var _logger = require('../util/logger');
 
@@ -44,7 +46,7 @@ function boot(params) {
     (0, _assert2.default)(taskList, 'A tasklist must be specified');
 
     // Create swf client.
-    var client = (0, _client2.default)();
+    var client = (0, _aws.createSWFClient)();
 
     // If we have a decider, boot up a decision poller.
     if (params.decider) {
@@ -64,19 +66,17 @@ function boot(params) {
     // If we have an activity list, boot up a activity poller.
     if (params.activities) {
         // Create config for poller.
-        var config = { domain: domain, taskList: { name: taskList + '-activities' } };
+        var _config = { domain: domain, taskList: { name: taskList + '-activities' } };
 
         // Create the activity handlers.
-        var activities = params.activities.map(function (act) {
-            return act();
-        });
+        // const activities = params.activities.map(act => act());
 
         // Create activity poller.
-        var poller = (0, _activityPoller2.default)({ client: client, config: config, activities: activities });
+        var _poller = (0, _activityPoller2.default)({ client: client, config: _config, activities: params.activities });
 
         // Register activities concurrently then start polling for activities.
-        Promise.all(poller.activities.map(function (act) {
-            return (0, _registerActivity2.default)(domain, act.config);
-        })).then(poller.start.bind(poller)).catch(log);
+        Promise.all(_poller.activities.map(function (act) {
+            return (0, _registerActivity2.default)(domain, Object.assign({}, _activity2.default.props, act.props));
+        })).then(_poller.start.bind(_poller)).catch(log);
     }
 };

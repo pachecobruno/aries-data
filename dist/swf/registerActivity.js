@@ -4,9 +4,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _client = require('./client');
-
-var _client2 = _interopRequireDefault(_client);
+var _aws = require('../util/aws');
 
 var _logger = require('../util/logger');
 
@@ -30,7 +28,7 @@ exports.default = (function () {
                 switch (_context.prev = _context.next) {
                     case 0:
                         // Create client.
-                        client = (0, _client2.default)();
+                        client = (0, _aws.createSWFClient)();
 
                         // Get registered activities for this domain.
 
@@ -75,7 +73,9 @@ exports.default = (function () {
         }, _callee, this);
     }));
 
-    return function registerActivity(_x, _x2) {
+    function registerActivity(_x, _x2) {
         return ref.apply(this, arguments);
-    };
+    }
+
+    return registerActivity;
 })();

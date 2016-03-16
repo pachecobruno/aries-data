@@ -49,6 +49,8 @@ exports.default = _stampit2.default.compose(_eventEmitter2.default, _stampit2.de
     }
 
     // Create a queue to manage concurrency.
+    // TODO: IMPLEMENT ME.  Once implemented, the poller
+    // can fetch jobs one after another, up to maxConcurrent and process them.
     this.queue = new _promiseQueue2.default(this.maxConcurrent, Infinity);
 }).methods({
     /**

@@ -4,9 +4,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _stampit = require('stampit');
-
-var _stampit2 = _interopRequireDefault(_stampit);
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _logger = require('../util/logger');
 
@@ -16,40 +14,57 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { var callNext = step.bind(null, "next"); var callThrow = step.bind(null, "throw"); function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(callNext, callThrow); } } callNext(); }); }; }
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 /**
  * Base Activity
  */
-exports.default = _stampit2.default.props({
-    config: {
-        defaultTaskHeartbeatTimeout: '900',
-        defaultTaskScheduleToStartTimeout: '120',
-        defaultTaskScheduleToCloseTimeout: '3800',
-        defaultTaskStartToCloseTimeout: '3600'
+
+var Activity = (function () {
+    function Activity() {
+        _classCallCheck(this, Activity);
+
+        var props = this.constructor.props;
+        if (!(props.name && props.version)) {
+            throw new Error('Activities require a name and version');
+        }
+        this.log = (0, _logger2.default)('activity:' + props.name);
     }
-}).init(function () {
-    if (!(this.config.name && this.config.version)) {
-        throw new Error('Activities require a name and version');
-    }
 
-    // Provider a logger to deciders.
-    this.log = (0, _logger2.default)('activity:' + this.config.name);
-}).methods({
-    onTask: function onTask(activityTask) {
-        var _this = this;
+    _createClass(Activity, [{
+        key: 'onTask',
+        value: (function () {
+            var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(activityTask) {
+                return regeneratorRuntime.wrap(function _callee$(_context) {
+                    while (1) {
+                        switch (_context.prev = _context.next) {
+                            case 0:
+                                return _context.abrupt('return');
 
-        return _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-            return regeneratorRuntime.wrap(function _callee$(_context) {
-                while (1) {
-                    switch (_context.prev = _context.next) {
-                        case 0:
-                            return _context.abrupt('return');
-
-                        case 1:
-                        case 'end':
-                            return _context.stop();
+                            case 1:
+                            case 'end':
+                                return _context.stop();
+                        }
                     }
-                }
-            }, _callee, _this);
-        }))();
-    }
-});
+                }, _callee, this);
+            }));
+
+            function onTask(_x) {
+                return ref.apply(this, arguments);
+            }
+
+            return onTask;
+        })()
+    }]);
+
+    return Activity;
+})();
+
+Activity.props = {
+    defaultTaskHeartbeatTimeout: '900',
+    defaultTaskScheduleToStartTimeout: '120',
+    defaultTaskScheduleToCloseTimeout: '3800',
+    defaultTaskStartToCloseTimeout: '3600'
+};
+exports.default = Activity;
+;

@@ -49,7 +49,7 @@ exports.default = _stampit2.default.compose(_poller2.default, _stampit2.default.
         var _this = this;
 
         return _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-            var activityType, module, task, config, args, output;
+            var activityType, Activity, task, config, args, activity, output;
             return regeneratorRuntime.wrap(function _callee$(_context) {
                 while (1) {
                     switch (_context.prev = _context.next) {
@@ -59,9 +59,9 @@ exports.default = _stampit2.default.compose(_poller2.default, _stampit2.default.
 
                             // Get the module for this activityType.
 
-                            module = _this.findModuleForActivity(result.activityType);
+                            Activity = _this.findModuleForActivity(result.activityType);
 
-                            if (module) {
+                            if (Activity) {
                                 _context.next = 5;
                                 break;
                             }
@@ -82,13 +82,13 @@ exports.default = _stampit2.default.compose(_poller2.default, _stampit2.default.
                             // This just allows more flexibility for config providers to provide
                             // additional contextual information.
 
-                            if (!module.getConfig) {
+                            if (!Activity.getConfig) {
                                 _context.next = 13;
                                 break;
                             }
 
                             _context.next = 9;
-                            return module.getConfig(task);
+                            return Activity.getConfig(task);
 
                         case 9:
                             _context.t1 = _context.sent;
@@ -109,64 +109,68 @@ exports.default = _stampit2.default.compose(_poller2.default, _stampit2.default.
 
                             args.unshift(task);
 
-                            // Run the task.
-                            _context.next = 19;
-                            return module.onTask.apply(module, args);
+                            // Create new instance of the activity.
+                            activity = new Activity(config);
 
-                        case 19:
+                            // Run the onTask function.
+
+                            _context.next = 20;
+                            return activity.onTask.apply(activity, args);
+
+                        case 20:
                             output = _context.sent;
 
                             if (!(output && !(0, _lodash2.default)(output))) {
-                                _context.next = 22;
+                                _context.next = 23;
                                 break;
                             }
 
                             throw new Error('Return value of activities must be a string');
 
-                        case 22:
-                            if (!module.afterTask) {
-                                _context.next = 25;
+                        case 23:
+                            if (!activity.afterTask) {
+                                _context.next = 26;
                                 break;
                             }
 
-                            _context.next = 25;
+                            _context.next = 26;
                             return module.afterTask.apply(module, args);
 
-                        case 25:
-                            _context.next = 27;
+                        case 26:
+                            _context.next = 28;
                             return _this.client.respondActivityTaskCompleted({
                                 taskToken: result.taskToken,
                                 result: output
                             });
 
-                        case 27:
-                            _context.next = 34;
+                        case 28:
+                            _context.next = 35;
                             break;
 
-                        case 29:
-                            _context.prev = 29;
+                        case 30:
+                            _context.prev = 30;
                             _context.t2 = _context['catch'](0);
 
                             log(_context.t2);
                             // Respond failure.
-                            _context.next = 34;
+                            _context.next = 35;
                             return _this.client.respondActivityTaskFailed({
                                 taskToken: result.taskToken,
                                 details: '',
                                 reason: ''
                             });
 
-                        case 34:
+                        case 35:
                         case 'end':
                             return _context.stop();
                     }
                 }
-            }, _callee, _this, [[0, 29]]);
+            }, _callee, _this, [[0, 30]]);
         }))();
     },
     findModuleForActivity: function findModuleForActivity(activityType) {
         return this.activities.find(function (a) {
-            return a.config.name === activityType.name && a.config.version === activityType.version;
+            return a.props.name === activityType.name && a.props.version === activityType.version;
         });
     }
 }));
