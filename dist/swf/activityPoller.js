@@ -24,15 +24,15 @@ var _activityTask = require('./activityTask');
 
 var _activityTask2 = _interopRequireDefault(_activityTask);
 
-var _logger = require('../util/logger');
+var _createLogger = require('../util/createLogger');
 
-var _logger2 = _interopRequireDefault(_logger);
+var _createLogger2 = _interopRequireDefault(_createLogger);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { var callNext = step.bind(null, "next"); var callThrow = step.bind(null, "throw"); function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(callNext, callThrow); } } callNext(); }); }; }
 
-var log = (0, _logger2.default)(__filename);
+var log = (0, _createLogger2.default)(__filename);
 
 /**
  * Activity poller
@@ -128,44 +128,35 @@ exports.default = _stampit2.default.compose(_poller2.default, _stampit2.default.
                             throw new Error('Return value of activities must be a string');
 
                         case 23:
-                            if (!activity.afterTask) {
-                                _context.next = 26;
-                                break;
-                            }
-
-                            _context.next = 26;
-                            return module.afterTask.apply(module, args);
-
-                        case 26:
-                            _context.next = 28;
+                            _context.next = 25;
                             return _this.client.respondActivityTaskCompleted({
                                 taskToken: result.taskToken,
                                 result: output
                             });
 
-                        case 28:
-                            _context.next = 35;
+                        case 25:
+                            _context.next = 32;
                             break;
 
-                        case 30:
-                            _context.prev = 30;
+                        case 27:
+                            _context.prev = 27;
                             _context.t2 = _context['catch'](0);
 
-                            log(_context.t2);
+                            log.error(_context.t2);
                             // Respond failure.
-                            _context.next = 35;
+                            _context.next = 32;
                             return _this.client.respondActivityTaskFailed({
                                 taskToken: result.taskToken,
                                 details: '',
                                 reason: ''
                             });
 
-                        case 35:
+                        case 32:
                         case 'end':
                             return _context.stop();
                     }
                 }
-            }, _callee, _this, [[0, 30]]);
+            }, _callee, _this, [[0, 27]]);
         }))();
     },
     findModuleForActivity: function findModuleForActivity(activityType) {

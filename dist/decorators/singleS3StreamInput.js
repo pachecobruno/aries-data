@@ -14,15 +14,9 @@ var _s3Streams = require('s3-streams');
 
 var _s3Streams2 = _interopRequireDefault(_s3Streams);
 
-var _logger = require('../util/logger');
-
-var _logger2 = _interopRequireDefault(_logger);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { var callNext = step.bind(null, "next"); var callThrow = step.bind(null, "throw"); function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(callNext, callThrow); } } callNext(); }); }; }
-
-var log = (0, _logger2.default)(__filename);
 
 function singleS3StreamInput(removeAfter) {
 
@@ -57,7 +51,6 @@ function singleS3StreamInput(removeAfter) {
                                     input = _s3Streams2.default.ReadStream((0, _aws.createS3Client)(true), params);
 
                                     // Create new activityTask replacing the original input with the file.
-                                    // const newActivityTask = Object.assign({}, activityTask, { input });
 
                                     newActivityTask = _extends({}, activityTask, { input: input });
 
@@ -74,7 +67,7 @@ function singleS3StreamInput(removeAfter) {
                                     result = _context.sent;
 
                                     if (!removeAfter) {
-                                        _context.next = 11;
+                                        _context.next = 12;
                                         break;
                                     }
 
@@ -83,9 +76,12 @@ function singleS3StreamInput(removeAfter) {
                                     return client.deleteObject(params);
 
                                 case 11:
-                                    return _context.abrupt('return', result);
+                                    _this.log.info('Deleted ' + params.Key);
 
                                 case 12:
+                                    return _context.abrupt('return', result);
+
+                                case 13:
                                 case 'end':
                                     return _context.stop();
                             }

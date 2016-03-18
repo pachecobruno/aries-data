@@ -16,15 +16,15 @@ var _decisionTask = require('./decisionTask');
 
 var _decisionTask2 = _interopRequireDefault(_decisionTask);
 
-var _logger = require('../util/logger');
+var _createLogger = require('../util/createLogger');
 
-var _logger2 = _interopRequireDefault(_logger);
+var _createLogger2 = _interopRequireDefault(_createLogger);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { var callNext = step.bind(null, "next"); var callThrow = step.bind(null, "throw"); function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(callNext, callThrow); } } callNext(); }); }; }
 
-var log = (0, _logger2.default)(__filename);
+var log = (0, _createLogger2.default)(__filename);
 
 /**
  * Decision poller
@@ -69,7 +69,7 @@ exports.default = _stampit2.default.compose(_poller2.default, _stampit2.default.
                         case 7:
 
                             // Respond with decisions.
-                            log('Submitting ' + decisions.length + ' decisions.');
+                            log.info('Submitting ' + decisions.length + ' decisions.');
                             _context.next = 10;
                             return _this.client.respondDecisionTaskCompleted({
                                 taskToken: result.taskToken,
@@ -84,7 +84,7 @@ exports.default = _stampit2.default.compose(_poller2.default, _stampit2.default.
                             _context.prev = 12;
                             _context.t0 = _context['catch'](0);
 
-                            log('Decision failed. Failing workflow', _context.t0);
+                            log.error('Decision failed. Failing workflow', _context.t0);
                             _context.next = 17;
                             return _this.client.respondDecisionTaskCompleted({
                                 taskToken: result.taskToken,

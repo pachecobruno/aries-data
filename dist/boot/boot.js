@@ -9,6 +9,10 @@ var _assert = require('assert');
 
 var _assert2 = _interopRequireDefault(_assert);
 
+var _createLogger = require('../util/createLogger');
+
+var _createLogger2 = _interopRequireDefault(_createLogger);
+
 var _aws = require('../util/aws');
 
 var _decisionPoller = require('../swf/decisionPoller');
@@ -27,13 +31,9 @@ var _activity = require('../swf/activity');
 
 var _activity2 = _interopRequireDefault(_activity);
 
-var _logger = require('../util/logger');
-
-var _logger2 = _interopRequireDefault(_logger);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var log = (0, _logger2.default)(__filename);
+var log = (0, _createLogger2.default)(__filename);
 
 function boot(params) {
     // Fallback to env if necessary.
@@ -68,15 +68,12 @@ function boot(params) {
         // Create config for poller.
         var _config = { domain: domain, taskList: { name: taskList + '-activities' } };
 
-        // Create the activity handlers.
-        // const activities = params.activities.map(act => act());
-
         // Create activity poller.
         var _poller = (0, _activityPoller2.default)({ client: client, config: _config, activities: params.activities });
 
         // Register activities concurrently then start polling for activities.
         Promise.all(_poller.activities.map(function (act) {
             return (0, _registerActivity2.default)(domain, Object.assign({}, _activity2.default.props, act.props));
-        })).then(_poller.start.bind(_poller)).catch(log);
+        })).then(_poller.start.bind(_poller)).catch(log.error.bind(log));
     }
 };

@@ -8,9 +8,9 @@ var _stampit = require('stampit');
 
 var _stampit2 = _interopRequireDefault(_stampit);
 
-var _logger = require('../util/logger');
+var _createLogger = require('../util/createLogger');
 
-var _logger2 = _interopRequireDefault(_logger);
+var _createLogger2 = _interopRequireDefault(_createLogger);
 
 var _lodash = require('lodash.flatten');
 
@@ -34,7 +34,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
  */
 exports.default = _stampit2.default.init(function () {
     // Provider a logger to deciders.
-    this.log = (0, _logger2.default)('decider');
+    this.log = (0, _createLogger2.default)('decider');
 }).methods({
     // Base implementation of onTask.  Return no decisions.
 
