@@ -19,7 +19,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function createSWFClient() {
     var raw = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
 
-    var client = new _awsSdk2.default.SWF({ region: process.env.AWS_S3_REGION });
+    var client = new _awsSdk2.default.SWF({ region: process.env.AWS_REGION });
     if (raw) return client;
 
     return (0, _thenifyAll2.default)(client, client, ['startWorkflowExecution', 'pollForDecisionTask', 'pollForActivityTask', 'respondDecisionTaskCompleted', 'respondActivityTaskCanceled', 'respondActivityTaskCompleted', 'respondActivityTaskFailed', 'listActivityTypes', 'registerActivityType']);
@@ -28,7 +28,7 @@ function createSWFClient() {
 function createS3Client() {
     var raw = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
 
-    var client = new _awsSdk2.default.S3({ region: process.env.AWS_S3_REGION });
+    var client = new _awsSdk2.default.S3({ region: process.env.AWS_REGION });
     if (raw) return client;
 
     return (0, _thenifyAll2.default)(client, client, ['getObject', 'putObject', 'deleteObject', 'upload']);
