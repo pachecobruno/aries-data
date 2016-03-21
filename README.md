@@ -1,4 +1,6 @@
-# aries
+![Aries logo](https://avatars1.githubusercontent.com/u/17130436?v=3&s=200)
+
+# Aries
 
 Aries is a library and CLI that makes it easy to create and run multi-stage workflows written in javascript (es2015/2016), preferably in a distributed cloud environment.  Aries currently supports [Amazon SWF](https://aws.amazon.com/swf/details/) but can evolve to support other services, or some future custom implementation.
 
