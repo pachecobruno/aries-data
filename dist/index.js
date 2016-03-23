@@ -3,14 +3,23 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.singleS3StreamInput = exports.singleS3FileInput = exports.singleS3FileOutput = exports.boot = exports.registerActivity = exports.workflowStateProvider = exports.activityConfigProvider = exports.decider = exports.Activity = exports.createLogger = exports.aws = undefined;
+exports.singleS3StreamInput = exports.singleS3FileInput = exports.singleS3FileOutput = exports.registerActivity = exports.workflowStateProvider = exports.activityConfigProvider = exports.decider = exports.Activity = exports.createLogger = exports.Aries = exports.aws = undefined;
 
-var _createLogger = require('./util/createLogger');
+var _Aries = require('./Aries');
+
+Object.defineProperty(exports, 'Aries', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_Aries).default;
+  }
+});
+
+var _logger = require('./util/logger');
 
 Object.defineProperty(exports, 'createLogger', {
   enumerable: true,
   get: function get() {
-    return _interopRequireDefault(_createLogger).default;
+    return _interopRequireDefault(_logger).default;
   }
 });
 
@@ -56,15 +65,6 @@ Object.defineProperty(exports, 'registerActivity', {
   enumerable: true,
   get: function get() {
     return _interopRequireDefault(_registerActivity).default;
-  }
-});
-
-var _boot = require('./boot/boot');
-
-Object.defineProperty(exports, 'boot', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_boot).default;
   }
 });
 
