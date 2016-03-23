@@ -9,7 +9,7 @@
     "build": "npm run clean && babel lib -d dist"
   },
   "bin": {
-    "aries": "./lib/boot/cli/aries.js"
+    "aries": "./lib/cli/aries.js"
   },
   "keywords": [],
   "author": "schnie",
