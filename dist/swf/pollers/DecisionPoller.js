@@ -37,19 +37,19 @@ var log = (0, _logger2.default)(__filename);
 var DecisionPoller = (function (_Poller) {
     _inherits(DecisionPoller, _Poller);
 
-    function DecisionPoller(config, decider) {
+    function DecisionPoller(config, Decider) {
         _classCallCheck(this, DecisionPoller);
 
         // Check for decider.
 
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DecisionPoller).call(this, config));
 
-        if (!decider) {
+        if (!Decider) {
             throw new Error('Decision poller requires a decider');
         }
 
         // Set the decider.
-        _this.decider = decider;
+        _this.decider = new Decider({ taskList: config.taskList.name });
         return _this;
     }
     // Method to call when polling for tasks.

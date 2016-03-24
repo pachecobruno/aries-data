@@ -56,14 +56,11 @@ var Aries = (function () {
 
     _createClass(Aries, [{
         key: 'startDecider',
-        value: function startDecider(deciderFactory) {
-            this.log.debug('Starting decider.');
+        value: function startDecider(decider) {
+            this.log.debug('Preparing to start decision poller.');
 
             // Create config for decider.
             var config = { domain: this.domain, taskList: { name: this.taskList } };
-
-            // Create the decider.
-            var decider = deciderFactory({ taskList: this.taskList });
 
             // Create poller.
             var poller = new _DecisionPoller2.default(config, decider);
@@ -77,7 +74,7 @@ var Aries = (function () {
             var _this = this,
                 _context;
 
-            this.log.debug('Starting worker.');
+            this.log.debug('Preparing to start activity poller.');
 
             // Create config for poller.
             var config = { domain: this.domain, taskList: { name: this.taskList + '-activities' } };
@@ -92,7 +89,7 @@ var Aries = (function () {
             });
 
             // Wait for all activities to be registered, then start polling.
-            Promise.all(promises).then(poller.start.bind(poller)).catch((_context = log).error.bind(_context));
+            Promise.all(promises).then(poller.start.bind(poller)).catch((_context = this.log).error.bind(_context));
         }
     }]);
 

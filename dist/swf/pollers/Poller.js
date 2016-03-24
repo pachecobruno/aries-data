@@ -21,8 +21,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var log = (0, _logger2.default)(__filename);
 
 var Poller = (function () {
-    // Flag to start/stop poller.
-
     function Poller(config) {
         _classCallCheck(this, Poller);
 
@@ -40,7 +38,9 @@ var Poller = (function () {
         // Create a queue to manage concurrency.
         // TODO: IMPLEMENT ME.  Once implemented, the poller
         // can fetch jobs one after another, up to maxConcurrent and process them.
-        // this.queue = new Queue(this.maxConcurrent, Infinity);
+        // this.queue = new Queue(Poller.maxConcurrent, Infinity);
+
+        this.stopPoller = true;
     }
 
     /**
@@ -143,7 +143,6 @@ var Poller = (function () {
     return Poller;
 })();
 
-Poller.stopPoller = true;
 Poller.maxConcurrent = 10;
 exports.default = Poller;
 ;
