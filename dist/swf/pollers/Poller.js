@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); // import Queue from 'promise-queue';
 
-var _aws = require('../util/aws');
+var _aws = require('../../util/aws');
 
-var _logger = require('../util/logger');
+var _logger = require('../../util/logger');
 
 var _logger2 = _interopRequireDefault(_logger);
 
@@ -21,7 +21,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var log = (0, _logger2.default)(__filename);
 
 var Poller = (function () {
-
     // Flag to start/stop poller.
 
     function Poller(config) {

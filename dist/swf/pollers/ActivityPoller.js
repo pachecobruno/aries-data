@@ -18,11 +18,11 @@ var _Poller2 = require('./Poller');
 
 var _Poller3 = _interopRequireDefault(_Poller2);
 
-var _ActivityTask = require('./tasks/ActivityTask');
+var _ActivityTask = require('../tasks/ActivityTask');
 
 var _ActivityTask2 = _interopRequireDefault(_ActivityTask);
 
-var _logger = require('../util/logger');
+var _logger = require('../../util/logger');
 
 var _logger2 = _interopRequireDefault(_logger);
 
@@ -60,7 +60,6 @@ var ActivityPoller = (function (_Poller) {
         _this.activities = activities;
         return _this;
     }
-
     // Method to call when polling for tasks.
 
     _createClass(ActivityPoller, [{

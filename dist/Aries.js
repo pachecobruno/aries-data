@@ -14,11 +14,11 @@ var _logger = require('./util/logger');
 
 var _logger2 = _interopRequireDefault(_logger);
 
-var _DecisionPoller = require('./swf/DecisionPoller');
+var _DecisionPoller = require('./swf/pollers/DecisionPoller');
 
 var _DecisionPoller2 = _interopRequireDefault(_DecisionPoller);
 
-var _ActivityPoller = require('./swf/ActivityPoller');
+var _ActivityPoller = require('./swf/pollers/ActivityPoller');
 
 var _ActivityPoller2 = _interopRequireDefault(_ActivityPoller);
 
