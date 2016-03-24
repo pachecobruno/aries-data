@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.singleS3StreamInput = exports.singleS3FileInput = exports.singleS3FileOutput = exports.registerActivity = exports.workflowStateProvider = exports.activityConfigProvider = exports.decider = exports.Activity = exports.createLogger = exports.Aries = exports.aws = undefined;
+exports.singleS3StreamInput = exports.singleS3FileInput = exports.singleS3FileOutput = exports.registerActivity = exports.workflowStateProvider = exports.decider = exports.Activity = exports.createLogger = exports.Aries = exports.aws = undefined;
 
 var _Aries = require('./Aries');
 
@@ -38,15 +38,6 @@ Object.defineProperty(exports, 'decider', {
   enumerable: true,
   get: function get() {
     return _interopRequireDefault(_decider).default;
-  }
-});
-
-var _activityConfigProvider = require('./swf/activityConfigProvider');
-
-Object.defineProperty(exports, 'activityConfigProvider', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_activityConfigProvider).default;
   }
 });
 
