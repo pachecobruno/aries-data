@@ -11,9 +11,8 @@ var _logger2 = _interopRequireDefault(_logger);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function logger() {
+function logger(name) {
     return function (target) {
-        console.log(target);
-        target.prototype.log = (0, _logger2.default)(target.name);
+        target.prototype.log = (0, _logger2.default)(name || target.name);
     };
 };
