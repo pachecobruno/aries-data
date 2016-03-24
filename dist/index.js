@@ -23,12 +23,12 @@ Object.defineProperty(exports, 'createLogger', {
   }
 });
 
-var _activity = require('./swf/activity');
+var _Activity = require('./swf/Activity');
 
 Object.defineProperty(exports, 'Activity', {
   enumerable: true,
   get: function get() {
-    return _interopRequireDefault(_activity).default;
+    return _interopRequireDefault(_Activity).default;
   }
 });
 
