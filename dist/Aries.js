@@ -7,13 +7,11 @@ exports.default = undefined;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
+var _dec, _class;
+
 var _assert = require('assert');
 
 var _assert2 = _interopRequireDefault(_assert);
-
-var _logger = require('./util/logger');
-
-var _logger2 = _interopRequireDefault(_logger);
 
 var _DecisionPoller = require('./swf/pollers/DecisionPoller');
 
@@ -31,21 +29,19 @@ var _Activity = require('./swf/Activity');
 
 var _Activity2 = _interopRequireDefault(_Activity);
 
+var _logger = require('./decorators/logger');
+
+var _logger2 = _interopRequireDefault(_logger);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Aries = (function () {
+var Aries = (_dec = (0, _logger2.default)(), _dec(_class = (function () {
     function Aries() {
         var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
         _classCallCheck(this, Aries);
-
-        // Set any log streams.
-        _logger.logger.setLogStreams(options.logStreams);
-
-        // Create a logger for this instance.
-        this.log = (0, _logger2.default)(__filename);
 
         // Fallback to env if necessary.
         this.domain = options.domain || process.env.ARIES_DOMAIN;
@@ -95,6 +91,5 @@ var Aries = (function () {
     }]);
 
     return Aries;
-})();
-
+})()) || _class);
 exports.default = Aries;

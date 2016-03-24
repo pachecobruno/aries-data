@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.logger = exports.createLogger = exports.singleS3StreamInput = exports.singleS3FileInput = exports.singleS3FileOutput = exports.registerActivity = exports.Decider = exports.Activity = exports.Aries = exports.aws = undefined;
+exports.logger = exports.setLogStreams = exports.createLogger = exports.singleS3StreamInput = exports.singleS3FileInput = exports.singleS3FileOutput = exports.registerActivity = exports.Decider = exports.Activity = exports.Aries = exports.aws = undefined;
 
 var _Aries = require('./Aries');
 
@@ -74,6 +74,12 @@ Object.defineProperty(exports, 'createLogger', {
   enumerable: true,
   get: function get() {
     return _interopRequireDefault(_logger).default;
+  }
+});
+Object.defineProperty(exports, 'setLogStreams', {
+  enumerable: true,
+  get: function get() {
+    return _logger.setLogStreams;
   }
 });
 
