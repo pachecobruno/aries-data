@@ -14,13 +14,13 @@ var _logger = require('./util/logger');
 
 var _logger2 = _interopRequireDefault(_logger);
 
-var _decisionPoller = require('./swf/decisionPoller');
+var _DecisionPoller = require('./swf/DecisionPoller');
 
-var _decisionPoller2 = _interopRequireDefault(_decisionPoller);
+var _DecisionPoller2 = _interopRequireDefault(_DecisionPoller);
 
-var _activityPoller = require('./swf/activityPoller');
+var _ActivityPoller = require('./swf/ActivityPoller');
 
-var _activityPoller2 = _interopRequireDefault(_activityPoller);
+var _ActivityPoller2 = _interopRequireDefault(_ActivityPoller);
 
 var _registerActivity = require('./swf/registerActivity');
 
@@ -66,7 +66,7 @@ var Aries = (function () {
             var decider = deciderFactory({ taskList: this.taskList });
 
             // Create poller.
-            var poller = (0, _decisionPoller2.default)({ config: config, decider: decider });
+            var poller = new _DecisionPoller2.default(config, decider);
 
             // Start polling for decisions.
             poller.start();
@@ -83,7 +83,7 @@ var Aries = (function () {
             var config = { domain: this.domain, taskList: { name: this.taskList + '-activities' } };
 
             // Create activity poller.
-            var poller = (0, _activityPoller2.default)({ config: config, activities: activities });
+            var poller = new _ActivityPoller2.default(config, activities);
 
             // Register activities concurrently.
             var promises = activities.map(function (act) {
