@@ -3,8 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.default = undefined;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _class, _temp;
 
 var _lodash = require('lodash.isstring');
 
@@ -22,10 +25,6 @@ var _ActivityTask = require('../tasks/ActivityTask');
 
 var _ActivityTask2 = _interopRequireDefault(_ActivityTask);
 
-var _logger = require('../../util/logger');
-
-var _logger2 = _interopRequireDefault(_logger);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { var callNext = step.bind(null, "next"); var callThrow = step.bind(null, "throw"); function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(callNext, callThrow); } } callNext(); }); }; }
@@ -36,13 +35,10 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var log = (0, _logger2.default)(__filename);
-
 /**
  * Activity poller
  */
-
-var ActivityPoller = (function (_Poller) {
+var ActivityPoller = (_temp = _class = (function (_Poller) {
     _inherits(ActivityPoller, _Poller);
 
     function ActivityPoller(config, activities) {
@@ -159,7 +155,7 @@ var ActivityPoller = (function (_Poller) {
                                 _context.prev = 27;
                                 _context.t2 = _context['catch'](0);
 
-                                log.error(_context.t2);
+                                this.log.error(_context.t2);
                                 // Respond failure.
                                 _context.next = 32;
                                 return this.client.respondActivityTaskFailed({
@@ -192,8 +188,6 @@ var ActivityPoller = (function (_Poller) {
     }]);
 
     return ActivityPoller;
-})(_Poller3.default);
-
-ActivityPoller.pollMethod = 'pollForActivityTask';
+})(_Poller3.default), _class.pollMethod = 'pollForActivityTask', _temp);
 exports.default = ActivityPoller;
 ;

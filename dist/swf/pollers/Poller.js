@@ -3,12 +3,15 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.default = undefined;
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); // import Queue from 'promise-queue';
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _dec, _class, _class2, _temp; // import Queue from 'promise-queue';
 
 var _aws = require('../../util/aws');
 
-var _logger = require('../../util/logger');
+var _logger = require('../../decorators/logger');
 
 var _logger2 = _interopRequireDefault(_logger);
 
@@ -18,9 +21,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var log = (0, _logger2.default)(__filename);
-
-var Poller = (function () {
+var Poller = (_dec = (0, _logger2.default)(), _dec(_class = (_temp = _class2 = (function () {
     function Poller(config) {
         _classCallCheck(this, Poller);
 
@@ -52,7 +53,7 @@ var Poller = (function () {
     _createClass(Poller, [{
         key: 'start',
         value: function start() {
-            log.info('Starting poller.');
+            this.log.info('Starting poller.');
             this.stopPoller = false;
             this.poll();
         }
@@ -64,7 +65,7 @@ var Poller = (function () {
     }, {
         key: 'stop',
         value: function stop() {
-            log.info('Stopping poller.');
+            this.log.info('Stopping poller.');
             this.stopPoller = true;
         }
 
@@ -118,7 +119,7 @@ var Poller = (function () {
                                 _context.prev = 12;
                                 _context.t0 = _context['catch'](2);
 
-                                log.error(_context.t0);
+                                this.log.error(_context.t0);
                                 // this.emit('error', e);
 
                             case 15:
@@ -141,8 +142,6 @@ var Poller = (function () {
     }]);
 
     return Poller;
-})();
-
-Poller.maxConcurrent = 10;
+})(), _class2.maxConcurrent = 10, _temp)) || _class);
 exports.default = Poller;
 ;

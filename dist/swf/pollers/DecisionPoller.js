@@ -3,8 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.default = undefined;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _class, _temp;
 
 var _Poller2 = require('./Poller');
 
@@ -13,10 +16,6 @@ var _Poller3 = _interopRequireDefault(_Poller2);
 var _DecisionTask = require('../tasks/DecisionTask');
 
 var _DecisionTask2 = _interopRequireDefault(_DecisionTask);
-
-var _logger = require('../../util/logger');
-
-var _logger2 = _interopRequireDefault(_logger);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -28,13 +27,10 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var log = (0, _logger2.default)(__filename);
-
 /**
  * Decision poller
  */
-
-var DecisionPoller = (function (_Poller) {
+var DecisionPoller = (_temp = _class = (function (_Poller) {
     _inherits(DecisionPoller, _Poller);
 
     function DecisionPoller(config, Decider) {
@@ -86,7 +82,7 @@ var DecisionPoller = (function (_Poller) {
                             case 7:
 
                                 // Respond with decisions.
-                                log.info('Submitting ' + decisions.length + ' decisions.');
+                                this.log.info('Submitting ' + decisions.length + ' decisions.');
                                 _context.next = 10;
                                 return this.client.respondDecisionTaskCompleted({
                                     taskToken: result.taskToken,
@@ -101,7 +97,7 @@ var DecisionPoller = (function (_Poller) {
                                 _context.prev = 12;
                                 _context.t0 = _context['catch'](0);
 
-                                log.error('Decision failed. Failing workflow', _context.t0);
+                                this.log.error('Decision failed. Failing workflow', _context.t0);
                                 _context.next = 17;
                                 return this.client.respondDecisionTaskCompleted({
                                     taskToken: result.taskToken,
@@ -131,8 +127,6 @@ var DecisionPoller = (function (_Poller) {
     }]);
 
     return DecisionPoller;
-})(_Poller3.default);
-
-DecisionPoller.pollMethod = 'pollForDecisionTask';
+})(_Poller3.default), _class.pollMethod = 'pollForDecisionTask', _temp);
 exports.default = DecisionPoller;
 ;

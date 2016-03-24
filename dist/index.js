@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.singleS3StreamInput = exports.singleS3FileInput = exports.singleS3FileOutput = exports.registerActivity = exports.Decider = exports.Activity = exports.createLogger = exports.Aries = exports.aws = undefined;
+exports.logger = exports.createLogger = exports.singleS3StreamInput = exports.singleS3FileInput = exports.singleS3FileOutput = exports.registerActivity = exports.Decider = exports.Activity = exports.Aries = exports.aws = undefined;
 
 var _Aries = require('./Aries');
 
@@ -11,15 +11,6 @@ Object.defineProperty(exports, 'Aries', {
   enumerable: true,
   get: function get() {
     return _interopRequireDefault(_Aries).default;
-  }
-});
-
-var _logger = require('./util/logger');
-
-Object.defineProperty(exports, 'createLogger', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_logger).default;
   }
 });
 
@@ -74,6 +65,24 @@ Object.defineProperty(exports, 'singleS3StreamInput', {
   enumerable: true,
   get: function get() {
     return _interopRequireDefault(_singleS3StreamInput).default;
+  }
+});
+
+var _logger = require('./util/logger');
+
+Object.defineProperty(exports, 'createLogger', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_logger).default;
+  }
+});
+
+var _logger2 = require('./decorators/logger');
+
+Object.defineProperty(exports, 'logger', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_logger2).default;
   }
 });
 

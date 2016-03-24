@@ -3,12 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.default = undefined;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _logger = require('../util/logger');
-
-var _logger2 = _interopRequireDefault(_logger);
+var _dec, _class;
 
 var _lodash = require('lodash.flatten');
 
@@ -22,6 +21,10 @@ var _lodash5 = require('lodash.camelcase');
 
 var _lodash6 = _interopRequireDefault(_lodash5);
 
+var _logger = require('../decorators/logger');
+
+var _logger2 = _interopRequireDefault(_logger);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { var callNext = step.bind(null, "next"); var callThrow = step.bind(null, "throw"); function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(callNext, callThrow); } } callNext(); }); }; }
@@ -32,13 +35,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * Base Decider
  * Provides some helper methods to help dealing with decisions.
  */
-
-var Decider = (function () {
+var Decider = (_dec = (0, _logger2.default)(), _dec(_class = (function () {
     function Decider(config) {
         _classCallCheck(this, Decider);
-
-        // Provider a logger to deciders.
-        this.log = (0, _logger2.default)('decider');
 
         Object.assign(this, config);
     }
@@ -224,7 +223,6 @@ var Decider = (function () {
     }]);
 
     return Decider;
-})();
-
+})()) || _class);
 exports.default = Decider;
 ;
