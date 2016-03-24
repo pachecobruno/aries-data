@@ -10,9 +10,9 @@ var _Poller2 = require('./Poller');
 
 var _Poller3 = _interopRequireDefault(_Poller2);
 
-var _decisionTask = require('./decisionTask');
+var _DecisionTask = require('./tasks/DecisionTask');
 
-var _decisionTask2 = _interopRequireDefault(_decisionTask);
+var _DecisionTask2 = _interopRequireDefault(_DecisionTask);
 
 var _logger = require('../util/logger');
 
@@ -66,44 +66,46 @@ var DecisionPoller = (function (_Poller) {
                             case 0:
                                 _context.prev = 0;
 
+                                console.log(result);
                                 // Create a decisionTask
-                                task = (0, _decisionTask2.default)(result);
+                                task = new _DecisionTask2.default(result);
+
+                                console.log(task);
 
                                 // Call onTask for a list of decisions to send back.
-
-                                _context.next = 4;
+                                _context.next = 6;
                                 return this.decider.onTask(task);
 
-                            case 4:
+                            case 6:
                                 decisions = _context.sent;
 
                                 if (decisions) {
-                                    _context.next = 7;
+                                    _context.next = 9;
                                     break;
                                 }
 
                                 return _context.abrupt('return');
 
-                            case 7:
+                            case 9:
 
                                 // Respond with decisions.
                                 log.info('Submitting ' + decisions.length + ' decisions.');
-                                _context.next = 10;
+                                _context.next = 12;
                                 return this.client.respondDecisionTaskCompleted({
                                     taskToken: result.taskToken,
                                     decisions: decisions
                                 });
 
-                            case 10:
-                                _context.next = 17;
+                            case 12:
+                                _context.next = 19;
                                 break;
 
-                            case 12:
-                                _context.prev = 12;
+                            case 14:
+                                _context.prev = 14;
                                 _context.t0 = _context['catch'](0);
 
                                 log.error('Decision failed. Failing workflow', _context.t0);
-                                _context.next = 17;
+                                _context.next = 19;
                                 return this.client.respondDecisionTaskCompleted({
                                     taskToken: result.taskToken,
                                     decisions: [{
@@ -115,12 +117,12 @@ var DecisionPoller = (function (_Poller) {
                                     }]
                                 });
 
-                            case 17:
+                            case 19:
                             case 'end':
                                 return _context.stop();
                         }
                     }
-                }, _callee, this, [[0, 12]]);
+                }, _callee, this, [[0, 14]]);
             }));
 
             function _onTask(_x) {

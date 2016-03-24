@@ -18,9 +18,9 @@ var _Poller2 = require('./Poller');
 
 var _Poller3 = _interopRequireDefault(_Poller2);
 
-var _activityTask = require('./activityTask');
+var _ActivityTask = require('./tasks/ActivityTask');
 
-var _activityTask2 = _interopRequireDefault(_activityTask);
+var _ActivityTask2 = _interopRequireDefault(_ActivityTask);
 
 var _logger = require('../util/logger');
 
@@ -89,7 +89,7 @@ var ActivityPoller = (function (_Poller) {
                             case 5:
 
                                 // Create an activityTask.
-                                task = (0, _activityTask2.default)(result);
+                                task = new _ActivityTask2.default(result);
 
                                 // If this module has a configProvider, run it.
                                 // This allows configProviders to return a single object, or array.
