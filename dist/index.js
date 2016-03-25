@@ -3,16 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.logger = exports.setLogStreams = exports.createLogger = exports.singleS3StreamInput = exports.singleS3FileInput = exports.singleS3FileOutput = exports.registerActivity = exports.Decider = exports.Activity = exports.Aries = exports.aws = undefined;
-
-var _Aries = require('./Aries');
-
-Object.defineProperty(exports, 'Aries', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_Aries).default;
-  }
-});
+exports.logger = exports.setLogStreams = exports.createLogger = exports.startDecider = exports.startWorker = exports.singleS3StreamInput = exports.singleS3FileInput = exports.singleS3FileOutput = exports.registerActivity = exports.Decider = exports.Activity = exports.aws = undefined;
 
 var _Activity = require('./swf/Activity');
 
@@ -65,6 +56,24 @@ Object.defineProperty(exports, 'singleS3StreamInput', {
   enumerable: true,
   get: function get() {
     return _interopRequireDefault(_singleS3StreamInput).default;
+  }
+});
+
+var _startWorker = require('./util/startWorker');
+
+Object.defineProperty(exports, 'startWorker', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_startWorker).default;
+  }
+});
+
+var _startDecider = require('./util/startDecider');
+
+Object.defineProperty(exports, 'startDecider', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_startDecider).default;
   }
 });
 

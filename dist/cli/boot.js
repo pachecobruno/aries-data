@@ -5,9 +5,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = boot;
 
-var _Aries = require('../Aries');
+var _startDecider = require('../util/startDecider');
 
-var _Aries2 = _interopRequireDefault(_Aries);
+var _startDecider2 = _interopRequireDefault(_startDecider);
+
+var _startWorker = require('../util/startWorker');
+
+var _startWorker2 = _interopRequireDefault(_startWorker);
 
 var _getDeciderModule = require('./getDeciderModule');
 
@@ -29,18 +33,15 @@ function boot(argv) {
     var domain = argv.domain;
     var taskList = argv.tasklist;
 
-    // Create aries instance.
-    var aries = new _Aries2.default({ domain: domain, taskList: taskList });
-
     // If a decider path was passed in, load and assign the module.
     if (argv.decider) {
         var decider = (0, _getDeciderModule2.default)(argv.decider);
-        aries.startDecider(decider);
+        (0, _startDecider2.default)(domain, taskList, decider);
     }
 
     // If an activities path was passed in, load and assign the modules.
     if (argv.activities) {
         var activities = (0, _getActivityModules2.default)(argv.activities);
-        aries.startWorker(activities);
+        (0, _startWorker2.default)(domain, taskList, activities);
     }
 };
