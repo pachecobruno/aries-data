@@ -119,7 +119,7 @@ var Poller = (_dec = (0, _logger2.default)(), _dec(_class = (_temp = _class2 = (
                                 _context.prev = 12;
                                 _context.t0 = _context['catch'](2);
 
-                                this.log.error(_context.t0);
+                                this.log.error('Error handling task.', _context.t0);
                                 // this.emit('error', e);
 
                             case 15:
