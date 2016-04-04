@@ -92,47 +92,52 @@ var Poller = (_dec = (0, _logger2.default)(), _dec(_class = (_temp = _class2 = f
                                 return _context.abrupt('return');
 
                             case 2:
-                                _context.prev = 2;
+
+                                // this.emit('poll');
+                                this.log.debug('Making poll request.');
+
+                                _context.prev = 3;
 
                                 // Grab static poll method string.
                                 pollMethod = this.constructor.pollMethod;
 
                                 // Call the poll method.
 
-                                _context.next = 6;
+                                _context.next = 7;
                                 return this.client[pollMethod](this.config);
 
-                            case 6:
+                            case 7:
                                 result = _context.sent;
 
                                 if (!result.taskToken) {
-                                    _context.next = 10;
+                                    _context.next = 12;
                                     break;
                                 }
 
-                                _context.next = 10;
+                                this.log.debug('Task recieved, executing handler.');
+                                _context.next = 12;
                                 return this._onTask(result);
 
-                            case 10:
-                                _context.next = 15;
+                            case 12:
+                                _context.next = 17;
                                 break;
 
-                            case 12:
-                                _context.prev = 12;
-                                _context.t0 = _context['catch'](2);
+                            case 14:
+                                _context.prev = 14;
+                                _context.t0 = _context['catch'](3);
 
                                 this.log.error('Error handling task.', _context.t0);
                                 // this.emit('error', e);
 
-                            case 15:
+                            case 17:
                                 return _context.abrupt('return', this.poll());
 
-                            case 16:
+                            case 18:
                             case 'end':
                                 return _context.stop();
                         }
                     }
-                }, _callee, this, [[2, 12]]);
+                }, _callee, this, [[3, 14]]);
             }));
 
             function poll() {
