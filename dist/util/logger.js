@@ -31,6 +31,7 @@ var Logger = function () {
 
         this.log = _bunyan2.default.createLogger({
             name: require('../../package.json').name,
+            serializers: { err: _bunyan2.default.stdSerializers.err },
             streams: streams || [{
                 level: 'trace',
                 stream: (0, _bunyanFormat2.default)({ outputMode: 'short' })
