@@ -5,9 +5,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = undefined;
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _dec, _class, _class2, _temp; // import Queue from 'promise-queue';
+
 
 var _aws = require('../../util/aws');
 
@@ -17,11 +18,11 @@ var _logger2 = _interopRequireDefault(_logger);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { var callNext = step.bind(null, "next"); var callThrow = step.bind(null, "throw"); function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(callNext, callThrow); } } callNext(); }); }; }
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Poller = (_dec = (0, _logger2.default)(), _dec(_class = (_temp = _class2 = (function () {
+var Poller = (_dec = (0, _logger2.default)(), _dec(_class = (_temp = _class2 = function () {
     function Poller(config) {
         _classCallCheck(this, Poller);
 
@@ -50,6 +51,7 @@ var Poller = (_dec = (0, _logger2.default)(), _dec(_class = (_temp = _class2 = (
 
     // Maximum tasks to run concurrently.
 
+
     _createClass(Poller, [{
         key: 'start',
         value: function start() {
@@ -75,7 +77,7 @@ var Poller = (_dec = (0, _logger2.default)(), _dec(_class = (_temp = _class2 = (
 
     }, {
         key: 'poll',
-        value: (function () {
+        value: function () {
             var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
                 var pollMethod, result;
                 return regeneratorRuntime.wrap(function _callee$(_context) {
@@ -138,10 +140,10 @@ var Poller = (_dec = (0, _logger2.default)(), _dec(_class = (_temp = _class2 = (
             }
 
             return poll;
-        })()
+        }()
     }]);
 
     return Poller;
-})(), _class2.maxConcurrent = 10, _temp)) || _class);
+}(), _class2.maxConcurrent = 10, _temp)) || _class);
 exports.default = Poller;
 ;

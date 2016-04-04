@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = undefined;
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _class, _temp;
 
@@ -19,7 +19,7 @@ var _DecisionTask2 = _interopRequireDefault(_DecisionTask);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { var callNext = step.bind(null, "next"); var callThrow = step.bind(null, "throw"); function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(callNext, callThrow); } } callNext(); }); }; }
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -30,7 +30,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * Decision poller
  */
-var DecisionPoller = (_temp = _class = (function (_Poller) {
+var DecisionPoller = (_temp = _class = function (_Poller) {
     _inherits(DecisionPoller, _Poller);
 
     function DecisionPoller(config, Decider) {
@@ -50,9 +50,10 @@ var DecisionPoller = (_temp = _class = (function (_Poller) {
     }
     // Method to call when polling for tasks.
 
+
     _createClass(DecisionPoller, [{
         key: '_onTask',
-        value: (function () {
+        value: function () {
             var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(result) {
                 var task, decisions;
                 return regeneratorRuntime.wrap(function _callee$(_context) {
@@ -123,10 +124,10 @@ var DecisionPoller = (_temp = _class = (function (_Poller) {
             }
 
             return _onTask;
-        })()
+        }()
     }]);
 
     return DecisionPoller;
-})(_Poller3.default), _class.pollMethod = 'pollForDecisionTask', _temp);
+}(_Poller3.default), _class.pollMethod = 'pollForDecisionTask', _temp);
 exports.default = DecisionPoller;
 ;

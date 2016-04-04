@@ -10,9 +10,11 @@ exports.default = singleS3FileInput;
 
 var _aws = require('../util/aws');
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { var callNext = step.bind(null, "next"); var callThrow = step.bind(null, "throw"); function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(callNext, callThrow); } } callNext(); }); }; }
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
 
-function singleS3FileInput(removeAfter) {
+function singleS3FileInput() {
+    var removeAfter = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+
 
     // Acting as a factory, return the decorator function.
     return function (target, key, descriptor) {
@@ -32,7 +34,7 @@ function singleS3FileInput(removeAfter) {
                 }
 
                 return _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-                    var params, response, input, newActivityTask, newArgs, result;
+                    var params, response, fileString, input, newActivityTask, newArgs, result;
                     return regeneratorRuntime.wrap(function _callee$(_context) {
                         while (1) {
                             switch (_context.prev = _context.next) {
@@ -40,7 +42,7 @@ function singleS3FileInput(removeAfter) {
                                     // Create params.
                                     params = {
                                         Bucket: process.env.AWS_S3_TEMP_BUCKET,
-                                        Key: activityTask.input
+                                        Key: activityTask.input.key
                                     };
 
                                     // Download file.
@@ -51,12 +53,17 @@ function singleS3FileInput(removeAfter) {
                                 case 3:
                                     response = _context.sent;
 
+
                                     // Get a string.
-                                    input = response.Body.toString();
+                                    fileString = response.Body.toString();
+
+                                    // Merge parsed input object with file contents.
+
+                                    input = _extends({}, activityTask.input, { file: fileString });
 
                                     // Create new activityTask replacing the original input with the file.
 
-                                    newActivityTask = _extends({}, activityTask, { input: input });
+                                    newActivityTask = activityTask.assign({ input: input });
 
                                     // Create args for original function.
 
@@ -64,27 +71,27 @@ function singleS3FileInput(removeAfter) {
 
                                     // Return the result.
 
-                                    _context.next = 9;
+                                    _context.next = 10;
                                     return callback.apply(_this, newArgs);
 
-                                case 9:
+                                case 10:
                                     result = _context.sent;
 
                                     if (!removeAfter) {
-                                        _context.next = 14;
+                                        _context.next = 15;
                                         break;
                                     }
 
-                                    _context.next = 13;
+                                    _context.next = 14;
                                     return client.deleteObject(params);
 
-                                case 13:
+                                case 14:
                                     _this.log.info('Deleted ' + params.Key);
 
-                                case 14:
+                                case 15:
                                     return _context.abrupt('return', result);
 
-                                case 15:
+                                case 16:
                                 case 'end':
                                     return _context.stop();
                             }

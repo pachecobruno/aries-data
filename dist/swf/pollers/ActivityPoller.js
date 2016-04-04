@@ -5,7 +5,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = undefined;
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _class, _temp;
 
@@ -27,7 +29,7 @@ var _ActivityTask2 = _interopRequireDefault(_ActivityTask);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { var callNext = step.bind(null, "next"); var callThrow = step.bind(null, "throw"); function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(callNext, callThrow); } } callNext(); }); }; }
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -38,7 +40,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * Activity poller
  */
-var ActivityPoller = (_temp = _class = (function (_Poller) {
+var ActivityPoller = (_temp = _class = function (_Poller) {
     _inherits(ActivityPoller, _Poller);
 
     function ActivityPoller(config, activities) {
@@ -56,11 +58,54 @@ var ActivityPoller = (_temp = _class = (function (_Poller) {
         _this.activities = activities;
         return _this;
     }
+
+    /**
+     * Serialize a task result.
+     * If its a string, just return it, else stringify json.
+     */
+
     // Method to call when polling for tasks.
 
+
     _createClass(ActivityPoller, [{
+        key: 'serializeOutput',
+        value: function serializeOutput(output) {
+            return (0, _lodash2.default)(output) ? output : JSON.stringify(output);
+        }
+
+        /**
+         * Parse an input task
+         * Attempt to parse an incoming task's input into an object.
+         */
+
+    }, {
+        key: 'parseTask',
+        value: function parseTask(task) {
+            var input = function (input) {
+                try {
+                    return JSON.parse(input);
+                } catch (e) {
+                    return input;
+                }
+            }(task.input);
+
+            return _extends({}, task, { input: input });
+        }
+
+        /**
+         * Check if we have an activity that can handle a given activityType
+         */
+
+    }, {
+        key: 'findModuleForActivity',
+        value: function findModuleForActivity(activityType) {
+            return this.activities.find(function (a) {
+                return a.props.name === activityType.name && a.props.version === activityType.version;
+            });
+        }
+    }, {
         key: '_onTask',
-        value: (function () {
+        value: function () {
             var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(result) {
                 var activityType, Activity, task, config, args, activity, output;
                 return regeneratorRuntime.wrap(function _callee$(_context) {
@@ -84,7 +129,7 @@ var ActivityPoller = (_temp = _class = (function (_Poller) {
                             case 5:
 
                                 // Create an activityTask.
-                                task = new _ActivityTask2.default(result);
+                                task = new _ActivityTask2.default(this.parseTask(result));
 
                                 // If this module has a configProvider, run it.
                                 // This allows configProviders to return a single object, or array.
@@ -115,6 +160,7 @@ var ActivityPoller = (_temp = _class = (function (_Poller) {
                             case 14:
                                 config = _context.t0;
 
+
                                 // Ensure a single dimension array.
                                 args = (0, _lodash4.default)(config);
 
@@ -123,7 +169,7 @@ var ActivityPoller = (_temp = _class = (function (_Poller) {
                                 args.unshift(task);
 
                                 // Create new instance of the activity.
-                                activity = new Activity(config);
+                                activity = new Activity();
 
                                 // Run the onTask function.
 
@@ -132,44 +178,35 @@ var ActivityPoller = (_temp = _class = (function (_Poller) {
 
                             case 20:
                                 output = _context.sent;
-
-                                if (!(output && !(0, _lodash2.default)(output))) {
-                                    _context.next = 23;
-                                    break;
-                                }
-
-                                throw new Error('Return value of activities must be a string');
-
-                            case 23:
-                                _context.next = 25;
+                                _context.next = 23;
                                 return this.client.respondActivityTaskCompleted({
                                     taskToken: result.taskToken,
-                                    result: output
+                                    result: this.serializeOutput(output)
                                 });
 
-                            case 25:
-                                _context.next = 32;
+                            case 23:
+                                _context.next = 30;
                                 break;
 
-                            case 27:
-                                _context.prev = 27;
+                            case 25:
+                                _context.prev = 25;
                                 _context.t2 = _context['catch'](0);
 
                                 this.log.error(_context.t2);
                                 // Respond failure.
-                                _context.next = 32;
+                                _context.next = 30;
                                 return this.client.respondActivityTaskFailed({
                                     taskToken: result.taskToken,
                                     details: '',
                                     reason: ''
                                 });
 
-                            case 32:
+                            case 30:
                             case 'end':
                                 return _context.stop();
                         }
                     }
-                }, _callee, this, [[0, 27]]);
+                }, _callee, this, [[0, 25]]);
             }));
 
             function _onTask(_x) {
@@ -177,17 +214,10 @@ var ActivityPoller = (_temp = _class = (function (_Poller) {
             }
 
             return _onTask;
-        })()
-    }, {
-        key: 'findModuleForActivity',
-        value: function findModuleForActivity(activityType) {
-            return this.activities.find(function (a) {
-                return a.props.name === activityType.name && a.props.version === activityType.version;
-            });
-        }
+        }()
     }]);
 
     return ActivityPoller;
-})(_Poller3.default), _class.pollMethod = 'pollForActivityTask', _temp);
+}(_Poller3.default), _class.pollMethod = 'pollForActivityTask', _temp);
 exports.default = ActivityPoller;
 ;

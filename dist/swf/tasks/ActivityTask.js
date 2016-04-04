@@ -9,6 +9,10 @@ var _Task2 = require('./Task');
 
 var _Task3 = _interopRequireDefault(_Task2);
 
+var _lodash = require('lodash.isstring');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -22,7 +26,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  * Simple wrapper around an activity task poll reponse.
  */
 
-var ActivityTask = (function (_Task) {
+var ActivityTask = function (_Task) {
   _inherits(ActivityTask, _Task);
 
   function ActivityTask() {
@@ -32,7 +36,7 @@ var ActivityTask = (function (_Task) {
   }
 
   return ActivityTask;
-})(_Task3.default);
+}(_Task3.default);
 
 exports.default = ActivityTask;
 ;

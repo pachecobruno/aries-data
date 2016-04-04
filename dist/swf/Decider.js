@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = undefined;
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _dec, _class;
 
@@ -27,7 +27,7 @@ var _logger2 = _interopRequireDefault(_logger);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { var callNext = step.bind(null, "next"); var callThrow = step.bind(null, "throw"); function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(callNext, callThrow); } } callNext(); }); }; }
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -35,7 +35,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * Base Decider
  * Provides some helper methods to help dealing with decisions.
  */
-var Decider = (_dec = (0, _logger2.default)(), _dec(_class = (function () {
+var Decider = (_dec = (0, _logger2.default)(), _dec(_class = function () {
     function Decider(config) {
         _classCallCheck(this, Decider);
 
@@ -44,9 +44,10 @@ var Decider = (_dec = (0, _logger2.default)(), _dec(_class = (function () {
 
     // Base implementation of onTask.  Return no decisions.
 
+
     _createClass(Decider, [{
         key: 'onTask',
-        value: (function () {
+        value: function () {
             var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(decisionTask) {
                 var newEvents, decisions, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, e, methodName, attrsKey, decision;
 
@@ -101,6 +102,7 @@ var Decider = (_dec = (0, _logger2.default)(), _dec(_class = (function () {
 
                             case 15:
                                 decision = _context.sent;
+
 
                                 // Push decisions onto list.
                                 decisions.push(decision);
@@ -160,7 +162,7 @@ var Decider = (_dec = (0, _logger2.default)(), _dec(_class = (function () {
             }
 
             return onTask;
-        })()
+        }()
 
         // Helper method to produce a 'ScheduleActivityTask' decision.
 
@@ -223,6 +225,6 @@ var Decider = (_dec = (0, _logger2.default)(), _dec(_class = (function () {
     }]);
 
     return Decider;
-})()) || _class);
+}()) || _class);
 exports.default = Decider;
 ;

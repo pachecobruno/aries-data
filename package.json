@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "babel-node test/test.js | faucet",
     "clean": "rm -rf dist",
     "build": "npm run clean && babel lib -d dist"
   },
@@ -30,10 +30,17 @@
     "minimist": "^1.2.0",
     "promise-queue": "^2.2.2",
     "s3-streams": "^0.3.0",
+    "single-trailing-newline": "^1.0.0",
+    "split2": "^2.0.1",
     "stream-to-promise": "^1.1.0",
-    "string-to-stream": "^1.0.1",
     "thenify-all": "^1.6.0",
+    "through2-linewriter": "0.0.1",
+    "through2-map": "^2.0.0",
     "uuid": "^2.0.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "babel-cli": "^6.6.5",
+    "blue-tape": "^0.2.0",
+    "faucet": "0.0.1"
+  }
 }

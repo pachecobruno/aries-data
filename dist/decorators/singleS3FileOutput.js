@@ -14,9 +14,13 @@ var _uuid2 = _interopRequireDefault(_uuid);
 
 var _aws = require('../util/aws');
 
+var _singleTrailingNewline = require('single-trailing-newline');
+
+var _singleTrailingNewline2 = _interopRequireDefault(_singleTrailingNewline);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { var callNext = step.bind(null, "next"); var callThrow = step.bind(null, "throw"); function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(callNext, callThrow); } } callNext(); }); }; }
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
 
 function singleS3FileOutput() {
 
@@ -66,7 +70,7 @@ function singleS3FileOutput() {
                                     params = {
                                         Bucket: process.env.AWS_S3_TEMP_BUCKET,
                                         Key: key,
-                                        Body: file
+                                        Body: (0, _singleTrailingNewline2.default)(file)
                                     };
 
                                     // Upload the file.
@@ -81,7 +85,7 @@ function singleS3FileOutput() {
                                     _this.log.debug('Successfully uploaded ' + key + '.');
 
                                     // Return the filename.
-                                    return _context.abrupt('return', key);
+                                    return _context.abrupt('return', { key: key });
 
                                 case 13:
                                 case 'end':
