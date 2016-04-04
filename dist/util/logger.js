@@ -3,7 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.setLogStreams = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -27,25 +26,25 @@ var Logger = function () {
 
     // Create a default logger.
 
-    function Logger() {
+    function Logger(streams) {
         _classCallCheck(this, Logger);
 
-        this.log = Logger.createRootLogger();
+        this.log = _bunyan2.default.createLogger({
+            name: require('../../package.json').name,
+            streams: streams || [{
+                level: 'trace',
+                stream: (0, _bunyanFormat2.default)({ outputMode: 'short' })
+            }, {
+                level: 'trace',
+                path: process.env.LOG_FILE || './app.log'
+            }]
+        });
     }
 
-    // Export function to set logstreams.
+    // Create a base logger.
 
 
     _createClass(Logger, [{
-        key: 'setLogStreams',
-        value: function setLogStreams(streams) {
-            if (!streams) return;
-            this.log = Logger.createRootLogger(streams);
-        }
-
-        // Create a base logger.
-
-    }, {
         key: 'createLogger',
         value: function createLogger(options) {
             // If a string is passed, just use it for the name.
@@ -53,23 +52,6 @@ var Logger = function () {
 
             // Return a child logger.
             return this.log.child(params);
-        }
-
-        // Create a root logger.
-
-    }], [{
-        key: 'createRootLogger',
-        value: function createRootLogger(streams) {
-            return _bunyan2.default.createLogger({
-                name: require('../../package.json').name,
-                streams: streams || [{
-                    level: 'trace',
-                    stream: (0, _bunyanFormat2.default)({ outputMode: 'short' })
-                }, {
-                    level: 'trace',
-                    path: process.env.LOG_FILE || './app.log'
-                }]
-            });
         }
     }]);
 
@@ -83,7 +65,3 @@ var logger = new Logger();
 
 // For backwards compat, just export createLogger as default.
 exports.default = logger.createLogger.bind(logger);
-
-// Export setLogStreams method;
-
-var setLogStreams = exports.setLogStreams = logger.setLogStreams.bind(logger);
