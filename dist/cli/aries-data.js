@@ -11,4 +11,4 @@ var argv = require('minimist')(process.argv.slice(2), {
 });
 
 // Get boot params and fire it up.
-require('../boot').default(argv);
+require('./boot').default(argv);
