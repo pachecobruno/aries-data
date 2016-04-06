@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-exports.transformer = transformer;
+exports.applyTransforms = applyTransforms;
 exports.default = singleS3StreamInput;
 
 var _aws = require('../util/aws');
@@ -15,31 +15,36 @@ var _s3Streams = require('s3-streams');
 
 var _s3Streams2 = _interopRequireDefault(_s3Streams);
 
-var _split = require('split2');
+var _highland = require('highland');
 
-var _split2 = _interopRequireDefault(_split);
-
-var _through2Map = require('through2-map');
-
-var _through2Map2 = _interopRequireDefault(_through2Map);
+var _highland2 = _interopRequireDefault(_highland);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
 
-function transformer(readStream, splitChunks) {
-    if (splitChunks === true) {
-        return readStream.pipe((0, _split2.default)());
-    } else if (splitChunks === 'json') {
-        return readStream.pipe((0, _split2.default)()).pipe(_through2Map2.default.obj(JSON.parse));
-    }
+// Pipe readstream through required transformers.
+function applyTransforms(source, split) {
+    // Wrap with highland.
+    var readStream = (0, _highland2.default)(source);
+
+    // Apply transformations.
+    if (!split) return readStream;
+    if (split === true) return readStream.split();
+    if (split === 'json') return readStream.split().map(JSON.parse);
 };
 
+/**
+ * Single S3 Stream Input
+ * @param {Boolean|String} split - Split the input on new lines and optionally parse.
+ * @param {Boolean} removeAfter - Remove file after we finish processing.
+ * @returns {Object} Json to locate the output file.
+ */
 function singleS3StreamInput() {
-    var splitChunks = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
-    var removeAfter = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+    var split = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+    var removeAfter = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
 
-    // Acting as a factory, return the decorator function.
+    // Return a decorator.
     return function (target, key, descriptor) {
         // Copy of the original function.
         var callback = descriptor.value;
@@ -54,7 +59,7 @@ function singleS3StreamInput() {
                 }
 
                 return _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-                    var params, readStream, stream, input, newActivityTask, newArgs, result, client;
+                    var params, source, stream, input, newActivityTask, newArgs, result, client;
                     return regeneratorRuntime.wrap(function _callee$(_context) {
                         while (1) {
                             switch (_context.prev = _context.next) {
@@ -67,11 +72,11 @@ function singleS3StreamInput() {
 
                                     // Create a stream to source file.
 
-                                    readStream = _s3Streams2.default.ReadStream((0, _aws.createS3Client)(true), params);
+                                    source = _s3Streams2.default.ReadStream((0, _aws.createS3Client)(true), params);
 
                                     // Split chunks by newlines if required.
 
-                                    stream = splitChunks ? transformer(readStream, splitChunks) : readStream;
+                                    stream = applyTransforms(source, split);
 
                                     // Merge parsed input object with a file stream.
 

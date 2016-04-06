@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.logger = exports.setLogStreams = exports.createLogger = exports.startDecider = exports.startWorker = exports.singleS3StreamOutput = exports.singleS3StreamInput = exports.singleS3FileInput = exports.singleS3FileOutput = exports.jsonOutput = exports.jsonInput = exports.registerActivity = exports.Decider = exports.Activity = exports.aws = undefined;
+exports.logger = exports.setLogStreams = exports.createLogger = exports.startDecider = exports.startWorker = exports.singleS3StreamOutput = exports.singleS3StreamInput = exports.singleS3FileInput = exports.registerActivity = exports.Decider = exports.Activity = exports.aws = undefined;
 
 var _Activity = require('./swf/Activity');
 
@@ -29,33 +29,6 @@ Object.defineProperty(exports, 'registerActivity', {
   enumerable: true,
   get: function get() {
     return _interopRequireDefault(_registerActivity).default;
-  }
-});
-
-var _jsonInput = require('./decorators/jsonInput');
-
-Object.defineProperty(exports, 'jsonInput', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_jsonInput).default;
-  }
-});
-
-var _jsonOutput = require('./decorators/jsonOutput');
-
-Object.defineProperty(exports, 'jsonOutput', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_jsonOutput).default;
-  }
-});
-
-var _singleS3FileOutput = require('./decorators/singleS3FileOutput');
-
-Object.defineProperty(exports, 'singleS3FileOutput', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_singleS3FileOutput).default;
   }
 });
 

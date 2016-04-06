@@ -99,6 +99,9 @@ var DecisionPoller = (_temp = _class = function (_Poller) {
                                 _context.t0 = _context['catch'](0);
 
                                 this.log.error('Decision failed. Failing workflow', _context.t0);
+
+                                // TODO: We should retry decisions a few times before failing.
+                                // Unexpected things like database timeouts could cause errors.
                                 _context.next = 17;
                                 return this.client.respondDecisionTaskCompleted({
                                     taskToken: result.taskToken,

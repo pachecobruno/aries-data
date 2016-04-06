@@ -6,14 +6,20 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-exports.transformer = transformer;
+exports.applyTransforms = applyTransforms;
 exports.default = singleS3StreamOutput;
+
+var _stream = require('stream');
 
 var _aws = require('../util/aws');
 
 var _streamToPromise = require('stream-to-promise');
 
 var _streamToPromise2 = _interopRequireDefault(_streamToPromise);
+
+var _lodash = require('lodash.isstring');
+
+var _lodash2 = _interopRequireDefault(_lodash);
 
 var _s3Streams = require('s3-streams');
 
@@ -23,34 +29,39 @@ var _uuid = require('uuid');
 
 var _uuid2 = _interopRequireDefault(_uuid);
 
-var _through2Linewriter = require('through2-linewriter');
+var _highland = require('highland');
 
-var _through2Linewriter2 = _interopRequireDefault(_through2Linewriter);
-
-var _through2Map = require('through2-map');
-
-var _through2Map2 = _interopRequireDefault(_through2Map);
+var _highland2 = _interopRequireDefault(_highland);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
 
-function transformer(readStream, insertNewlines) {
-    if (insertNewlines === true) {
-        return readStream.pipe((0, _through2Linewriter2.default)());
-    } else if (insertNewlines === 'json') {
-        return readStream.pipe(_through2Map2.default.obj(JSON.stringify)).pipe((0, _through2Linewriter2.default)());
-    }
+// Pipe readstream through required transformers.
+function applyTransforms(source, split) {
+    // Wrap with highland.
+    var readStream = (0, _highland2.default)(source);
+
+    // Apply transformations.
+    if (!split) return readStream;
+    if (split === true) return readStream.intersperse('\n');
+    if (split === 'json') return readStream.map(JSON.stringify).intersperse('\n');
 };
 
+/**
+ * Single S3 Stream Output
+ * @param {Boolean|String} split - Split the input on new lines and optionally parse.
+ * @returns {Object} Json to locate the output file.
+ */
 function singleS3StreamOutput() {
-    var insertNewlines = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+    var split = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
 
-    // Acting as a factory, return the decorator function.
+    // Return a decorator.
     return function (target, key, descriptor) {
         // Copy of the original function.
         var callback = descriptor.value;
 
+        // Return a new descriptor with our new wrapper function.
         return _extends({}, descriptor, {
             value: function value() {
                 var _this = this;
@@ -60,7 +71,7 @@ function singleS3StreamOutput() {
                 }
 
                 return _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-                    var readStream, key, params, stream, writeStream, result;
+                    var output, source, key, params, writeStream, stream, result;
                     return regeneratorRuntime.wrap(function _callee$(_context) {
                         while (1) {
                             switch (_context.prev = _context.next) {
@@ -69,9 +80,9 @@ function singleS3StreamOutput() {
                                     return callback.apply(_this, args);
 
                                 case 2:
-                                    readStream = _context.sent;
+                                    output = _context.sent;
 
-                                    if (readStream) {
+                                    if (output) {
                                         _context.next = 5;
                                         break;
                                     }
@@ -80,7 +91,11 @@ function singleS3StreamOutput() {
 
                                 case 5:
 
+                                    // Create new string object if output is string literal.
+                                    source = (0, _lodash2.default)(output) ? new String(output) : output;
+
                                     // Create a UUID for the filename.
+
                                     key = _uuid2.default.v4();
 
                                     // Create upload params.
@@ -89,19 +104,22 @@ function singleS3StreamOutput() {
                                         Bucket: process.env.AWS_S3_TEMP_BUCKET,
                                         Key: key
                                     };
-                                    stream = insertNewlines ? transformer(readStream, insertNewlines) : readStream;
 
                                     // Create a stream to write to s3.
 
                                     writeStream = _s3Streams2.default.WriteStream((0, _aws.createS3Client)(true), params);
 
+                                    // Plug in our transformers if needed.
+
+                                    stream = applyTransforms(source, split);
+
                                     // Upload and wait for stream to finish.
 
                                     _this.log.debug('Streaming ' + key + ' to s3.');
-                                    _context.next = 12;
+                                    _context.next = 13;
                                     return (0, _streamToPromise2.default)(stream.pipe(writeStream));
 
-                                case 12:
+                                case 13:
                                     result = _context.sent;
 
                                     _this.log.debug('Successfully streamed ' + key + ' to s3.');
@@ -109,7 +127,7 @@ function singleS3StreamOutput() {
                                     // Return the filename.
                                     return _context.abrupt('return', { key: key });
 
-                                case 15:
+                                case 16:
                                 case 'end':
                                     return _context.stop();
                             }

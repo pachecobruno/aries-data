@@ -22,7 +22,7 @@ function createSWFClient() {
     var client = new _awsSdk2.default.SWF({ region: process.env.AWS_REGION });
     if (raw) return client;
 
-    return (0, _thenifyAll2.default)(client, client, ['startWorkflowExecution', 'pollForDecisionTask', 'pollForActivityTask', 'respondDecisionTaskCompleted', 'respondActivityTaskCanceled', 'respondActivityTaskCompleted', 'respondActivityTaskFailed', 'listActivityTypes', 'registerActivityType']);
+    return (0, _thenifyAll2.default)(client, client, ['startWorkflowExecution', 'pollForDecisionTask', 'pollForActivityTask', 'respondDecisionTaskCompleted', 'respondActivityTaskCanceled', 'respondActivityTaskCompleted', 'respondActivityTaskFailed', 'listActivityTypes', 'registerActivityType', 'terminateWorkflowExecution']);
 };
 
 function createS3Client() {
