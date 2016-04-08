@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.logger = exports.setLogStreams = exports.createLogger = exports.startDecider = exports.startWorker = exports.singleS3StreamOutput = exports.singleS3StreamInput = exports.singleS3FileInput = exports.registerActivity = exports.Decider = exports.Activity = exports.aws = undefined;
+exports.logger = exports.setLogStreams = exports.createLogger = exports.startDecider = exports.startWorker = exports.singleS3StreamOutput = exports.singleS3StreamInput = exports.singleS3FileOutput = exports.singleS3FileInput = exports.registerActivity = exports.Decider = exports.Activity = exports.aws = undefined;
 
 var _Activity = require('./swf/Activity');
 
@@ -38,6 +38,15 @@ Object.defineProperty(exports, 'singleS3FileInput', {
   enumerable: true,
   get: function get() {
     return _interopRequireDefault(_singleS3FileInput).default;
+  }
+});
+
+var _singleS3FileOutput = require('./decorators/singleS3FileOutput');
+
+Object.defineProperty(exports, 'singleS3FileOutput', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_singleS3FileOutput).default;
   }
 });
 
