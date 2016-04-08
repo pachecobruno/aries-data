@@ -70,7 +70,7 @@ function singleS3FileOutput() {
                                     params = {
                                         Bucket: process.env.AWS_S3_TEMP_BUCKET,
                                         Key: key,
-                                        Body: (0, _singleTrailingNewline2.default)(file)
+                                        Body: file
                                     };
 
                                     // Upload the file.
