@@ -23,7 +23,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
 
-// Pipe readstream through required transformers.
+/**
+ * Apply split/json parsing transform streams.
+ * @param {Object} source - read stream.
+ * @param {Boolean/String} split - split on newlines and/or parse json.
+ */
 function applyTransforms(source, split) {
     // Wrap with highland.
     var readStream = (0, _highland2.default)(source);
@@ -59,24 +63,24 @@ function singleS3StreamInput() {
                 }
 
                 return _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-                    var params, source, stream, input, newActivityTask, newArgs, result, client;
+                    var s3Params, readStream, stream, input, newActivityTask, newArgs, result, client;
                     return regeneratorRuntime.wrap(function _callee$(_context) {
                         while (1) {
                             switch (_context.prev = _context.next) {
                                 case 0:
-                                    // Create params.
-                                    params = {
+                                    // Location of s3 file.
+                                    s3Params = {
                                         Bucket: process.env.AWS_S3_TEMP_BUCKET,
                                         Key: activityTask.input.key
                                     };
 
-                                    // Create a stream to source file.
+                                    // Get a read stream to the source.
 
-                                    source = _s3Streams2.default.ReadStream((0, _aws.createS3Client)(true), params);
+                                    readStream = _s3Streams2.default.ReadStream((0, _aws.createS3Client)(true), s3Params);
 
                                     // Split chunks by newlines if required.
 
-                                    stream = applyTransforms(source, split);
+                                    stream = applyTransforms(readStream, split);
 
                                     // Merge parsed input object with a file stream.
 
@@ -105,10 +109,10 @@ function singleS3StreamInput() {
 
                                     client = (0, _aws.createS3Client)();
                                     _context.next = 13;
-                                    return client.deleteObject(params);
+                                    return client.deleteObject(s3Params);
 
                                 case 13:
-                                    _this.log.info('Deleted ' + params.Key);
+                                    _this.log.info('Deleted ' + s3Params.Key);
 
                                 case 14:
                                     return _context.abrupt('return', result);

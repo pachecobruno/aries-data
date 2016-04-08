@@ -37,10 +37,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
 
-// Pipe readstream through required transformers.
-function applyTransforms(source, split) {
+/**
+ * Apply split/json stringify transform streams.
+ * @param {Object} source - read stream.
+ * @param {Boolean/String} split - split on newlines and/or stringify json.
+ */
+function applyTransforms(output, split) {
     // Wrap with highland.
-    var readStream = (0, _highland2.default)(source);
+    var readStream = (0, _highland2.default)(output);
 
     // Apply transformations.
     if (!split) return readStream;
@@ -71,7 +75,7 @@ function singleS3StreamOutput() {
                 }
 
                 return _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-                    var output, source, key, params, writeStream, stream, result;
+                    var output, source, readStream, s3Params, writeStream, result;
                     return regeneratorRuntime.wrap(function _callee$(_context) {
                         while (1) {
                             switch (_context.prev = _context.next) {
@@ -94,40 +98,36 @@ function singleS3StreamOutput() {
                                     // Create new string object if output is string literal.
                                     source = (0, _lodash2.default)(output) ? new String(output) : output;
 
-                                    // Create a UUID for the filename.
-
-                                    key = _uuid2.default.v4();
-
-                                    // Create upload params.
-
-                                    params = {
-                                        Bucket: process.env.AWS_S3_TEMP_BUCKET,
-                                        Key: key
-                                    };
-
-                                    // Create a stream to write to s3.
-
-                                    writeStream = _s3Streams2.default.WriteStream((0, _aws.createS3Client)(true), params);
-
                                     // Plug in our transformers if needed.
 
-                                    stream = applyTransforms(source, split);
+                                    readStream = applyTransforms(source, split);
+
+                                    // Location of s3 file.
+
+                                    s3Params = {
+                                        Bucket: process.env.AWS_S3_TEMP_BUCKET,
+                                        Key: _uuid2.default.v4()
+                                    };
+
+                                    // Create write stream.
+
+                                    writeStream = _s3Streams2.default.WriteStream((0, _aws.createS3Client)(true), s3Params);
 
                                     // Upload and wait for stream to finish.
 
-                                    _this.log.debug('Streaming ' + key + ' to s3.');
-                                    _context.next = 13;
-                                    return (0, _streamToPromise2.default)(stream.pipe(writeStream));
+                                    _this.log.debug('Streaming ' + s3Params.Key + ' to s3.');
+                                    _context.next = 12;
+                                    return (0, _streamToPromise2.default)(readStream.pipe(writeStream));
 
-                                case 13:
+                                case 12:
                                     result = _context.sent;
 
-                                    _this.log.debug('Successfully streamed ' + key + ' to s3.');
+                                    _this.log.debug('Successfully streamed ' + s3Params.Key + ' to s3.');
 
                                     // Return the filename.
-                                    return _context.abrupt('return', { key: key });
+                                    return _context.abrupt('return', { key: s3Params.Key });
 
-                                case 16:
+                                case 15:
                                 case 'end':
                                     return _context.stop();
                             }
