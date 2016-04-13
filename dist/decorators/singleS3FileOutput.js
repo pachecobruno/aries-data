@@ -14,10 +14,6 @@ var _uuid2 = _interopRequireDefault(_uuid);
 
 var _aws = require('../util/aws');
 
-var _singleTrailingNewline = require('single-trailing-newline');
-
-var _singleTrailingNewline2 = _interopRequireDefault(_singleTrailingNewline);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
@@ -42,7 +38,7 @@ function singleS3FileOutput() {
                 }
 
                 return _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-                    var file, key, params, response;
+                    var file, s3Params, response;
                     return regeneratorRuntime.wrap(function _callee$(_context) {
                         while (1) {
                             switch (_context.prev = _context.next) {
@@ -62,32 +58,28 @@ function singleS3FileOutput() {
 
                                 case 5:
 
-                                    // Create a UUID for the filename.
-                                    key = _uuid2.default.v4();
-
                                     // Create upload params.
-
-                                    params = {
+                                    s3Params = {
                                         Bucket: process.env.AWS_S3_TEMP_BUCKET,
-                                        Key: key,
+                                        Key: _uuid2.default.v4(),
                                         Body: file
                                     };
 
                                     // Upload the file.
 
-                                    _this.log.debug('Uploading ' + key + ' to s3.');
-                                    _context.next = 10;
-                                    return client.upload(params);
+                                    _this.log.debug('Uploading ' + s3Params.Key + ' to s3.');
+                                    _context.next = 9;
+                                    return client.upload(s3Params);
 
-                                case 10:
+                                case 9:
                                     response = _context.sent;
 
-                                    _this.log.debug('Successfully uploaded ' + key + '.');
+                                    _this.log.debug('Successfully uploaded ' + s3Params.Key + '.');
 
                                     // Return the filename.
-                                    return _context.abrupt('return', { key: key });
+                                    return _context.abrupt('return', { key: s3Params.Key });
 
-                                case 13:
+                                case 12:
                                 case 'end':
                                     return _context.stop();
                             }

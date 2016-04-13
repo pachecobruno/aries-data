@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.logger = exports.setLogStreams = exports.createLogger = exports.startDecider = exports.startWorker = exports.singleS3StreamOutput = exports.singleS3StreamInput = exports.singleS3FileOutput = exports.singleS3FileInput = exports.registerActivity = exports.Decider = exports.Activity = exports.aws = undefined;
+exports.logger = exports.setLogStreams = exports.createLogger = exports.ActivityTester = exports.startDecider = exports.startWorker = exports.singleS3StreamOutput = exports.singleS3StreamInput = exports.singleS3FileOutput = exports.singleS3FileInput = exports.registerActivity = exports.Decider = exports.Activity = exports.aws = undefined;
 
 var _Activity = require('./swf/Activity');
 
@@ -83,6 +83,15 @@ Object.defineProperty(exports, 'startDecider', {
   enumerable: true,
   get: function get() {
     return _interopRequireDefault(_startDecider).default;
+  }
+});
+
+var _ActivityTester = require('./util/testing/ActivityTester');
+
+Object.defineProperty(exports, 'ActivityTester', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_ActivityTester).default;
   }
 });
 

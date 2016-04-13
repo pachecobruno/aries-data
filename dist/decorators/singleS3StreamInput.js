@@ -32,10 +32,21 @@ function applyTransforms(source, split) {
     // Wrap with highland.
     var readStream = (0, _highland2.default)(source);
 
-    // Apply transformations.
-    if (!split) return readStream;
-    if (split === true) return readStream.split();
-    if (split === 'json') return readStream.split().map(JSON.parse);
+    // No transformations.
+    if (!split) {
+        return readStream;
+    }
+
+    // Split on new lines.
+    if (split === true) {
+        return readStream.split();
+    }
+
+    // Split on new lines, then parse individual lines into objects.
+    // Ignore errors - typically caused by trailing new lines in input.
+    if (split === 'json') {
+        return readStream.split().map(JSON.parse).errors(function (err) {});
+    }
 };
 
 /**

@@ -9,8 +9,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 exports.applyTransforms = applyTransforms;
 exports.default = singleS3StreamOutput;
 
-var _stream = require('stream');
-
 var _aws = require('../util/aws');
 
 var _streamToPromise = require('stream-to-promise');
@@ -46,10 +44,20 @@ function applyTransforms(output, split) {
     // Wrap with highland.
     var readStream = (0, _highland2.default)(output);
 
-    // Apply transformations.
-    if (!split) return readStream;
-    if (split === true) return readStream.intersperse('\n');
-    if (split === 'json') return readStream.map(JSON.stringify).intersperse('\n');
+    // No transformations.
+    if (!split) {
+        return readStream;
+    }
+
+    // Add new lines between each chunk.
+    if (split === true) {
+        return readStream.intersperse('\n');
+    }
+
+    // Stringify emitted objects, and add new lines.
+    if (split === 'json') {
+        return readStream.map(JSON.stringify).intersperse('\n');
+    }
 };
 
 /**
