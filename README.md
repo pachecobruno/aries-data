@@ -27,31 +27,38 @@ Currently, `onTask` should only return a string, which will be loaded to s3 as a
 
 ##### Decorators
 We provide a few decorators that can be used in any activity, using the following syntax:
-```
-import { Activity, singleS3FileInput, singleS3FileOutput } from 'astronomer-aries';
+```javascript
+iimport { Activity, singleS3FileInput, singleS3StreamOutput } from 'aries-data';
 import flatten from 'flat';
 import papa from 'babyparse';
 
+/**
+ * Loads a JSON file, transforms it to csv, then loads back to s3.
+ */
 export default class JsonToCsv extends Activity {
     static props = {
         name: require('../package.json').name,
         version: require('../package.json').version,
     };
-    // Decorators used here
-    @singleS3FileInput(true)
-    @singleS3FileOutput()
+
+    @singleS3FileInput()
+    @singleS3StreamOutput()
     async onTask(activityTask, config) {
         // Create array of strings by splitting on newlines.
-        const split = activityTask.input.split('\n');
+        const split = activityTask.input.file.split('\n');
 
         // Turn strings to objects.
-        const docs = split.map(JSON.parse);
+        const docs = split.map(o => {
+            try {
+                return JSON.parse(o)
+            } catch(e) {}
+        }).filter(Boolean);
 
         // Flatten json objects.
         const flatDocs = docs.map(d => flatten(d, { delimiter: '_' }));
 
         // Json to Csv.
-        return papa.unparse(flatDocs, { quotes: true });
+        return papa.unparse(flatDocs, { quotes: true, newline: '\n' });
     }
 };
 ```
