@@ -65,7 +65,6 @@ export default class JsonToCsv extends Activity {
 
 1. `singleS3FileInput` - Converts activityTask.input from an AWS S3 Key to the contents of a file.
     * Arguments: `removeAfter`: if set to true, the file will be removed after
-2. `singleS3FileOutput` - Takes the returned string, and store it in an S3 Object.
 3. `singleS3StreamInput` - Converts input to a [stream](http://www.streamjs.org)
     * Arguments: `removeAfter`: if set to true, the file will be removed after
 4. `singleS3StreamOutput` - Allows you to return a [stream](http://www.streamjs.org), which is converted into a file before uploading to S3.
@@ -76,6 +75,24 @@ When testing an activity, `console.log` doesn't work well due to the output gett
 ##### Testing
 For consistency, all activites should use [tape](https://github.com/substack/tape) for testing.  You should split the functionality and logic of your integration into separate functions on your activity.  These functions should be pure and operate on nothing but its input values, then return some result that can be tested.  Ideally, your `onTask` function should just be the glue between the other testable functions of your activity.
 - `npm run test`
+
+###### ActivityTester module
+The `ActivityTester` module can be imported from `aries-data` into your tests to run full blown tests by using mock input/output files and executing the onTask function. For example, the testing used when flattening json:
+```javascript
+import JsonFlatten from '..';
+test('flattens a stream', t => async function() {
+    const tester = new ActivityTester(JsonFlatten); // pass in your activity to the constructor
+
+    tester.interceptS3StreamInput('./test/input'); // file to log input
+    tester.testS3StreamOutput('./test/output', t.equal); // file to log output
+
+    const task = { input: { key: '123' } }; // specify `activityTask` to use when testing
+    const config = { some: 'thing' }; // specify `config` to use when testing
+
+    const result = await tester.onTask(task, config); // run the task
+    t.ok(result);
+}());
+```
 
 ##### Putting it all together
 Typically, adding a new "integration" may only involve writing a single activity that will be chained to already existing activities to produce the desired workflow.  For example, if you need to get salesforece API data to redshift, you should only need to write the `aries-activity-salesforce-source` activity.  When running as a workflow, your new `aries-activity-salesforce-source` could read data from salesforce and write the json response objects to an s3 object.  The next activity, `aries-activity-json-to-csv` could transform the data from json objects to csv, and load the result to a new s3 object.  Finally, `aries-activity-redshift-sink` could use the csv output and efficiently load the data using the `COPY` command.
