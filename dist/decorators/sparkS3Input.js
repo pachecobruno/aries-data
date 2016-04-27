@@ -17,3 +17,4 @@
 //         this.log.debug(process.hrtime(start));
 //     };
 // };
+"use strict";
