@@ -5,6 +5,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = undefined;
 
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -107,7 +109,8 @@ var ActivityPoller = (_temp = _class = function (_Poller) {
         key: '_onTask',
         value: function () {
             var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(result) {
-                var activityType, Activity, task, config, args, activity, output;
+                var activityType, Activity, task, config, args, activity, start, output, _process$hrtime, _process$hrtime2, seconds;
+
                 return regeneratorRuntime.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
@@ -173,40 +176,48 @@ var ActivityPoller = (_temp = _class = function (_Poller) {
 
                                 // Run the onTask function.
 
-                                _context.next = 20;
+                                start = process.hrtime();
+                                _context.next = 21;
                                 return activity.onTask.apply(activity, args);
 
-                            case 20:
+                            case 21:
                                 output = _context.sent;
-                                _context.next = 23;
+                                _process$hrtime = process.hrtime(start);
+                                _process$hrtime2 = _slicedToArray(_process$hrtime, 1);
+                                seconds = _process$hrtime2[0];
+
+                                this.log.debug('onTask took ' + seconds + ' seconds');
+
+                                // Respond completed.
+                                _context.next = 28;
                                 return this.client.respondActivityTaskCompleted({
                                     taskToken: result.taskToken,
                                     result: this.serializeOutput(output)
                                 });
 
-                            case 23:
-                                _context.next = 30;
+                            case 28:
+                                _context.next = 35;
                                 break;
 
-                            case 25:
-                                _context.prev = 25;
+                            case 30:
+                                _context.prev = 30;
                                 _context.t2 = _context['catch'](0);
 
                                 this.log.error(_context.t2);
                                 // Respond failure.
-                                _context.next = 30;
+                                _context.next = 35;
                                 return this.client.respondActivityTaskFailed({
                                     taskToken: result.taskToken,
                                     details: '',
                                     reason: ''
                                 });
 
-                            case 30:
+                            case 35:
                             case 'end':
                                 return _context.stop();
                         }
                     }
-                }, _callee, this, [[0, 25]]);
+                }, _callee, this, [[0, 30]]);
             }));
 
             function _onTask(_x) {
