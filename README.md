@@ -76,7 +76,7 @@ When testing an activity, `console.log` doesn't work well due to the output gett
 For consistency, all activites should use [tape](https://github.com/substack/tape) for testing.  You should split the functionality and logic of your integration into separate functions on your activity.  These functions should be pure and operate on nothing but its input values, then return some result that can be tested.  Ideally, your `onTask` function should just be the glue between the other testable functions of your activity.
 - `npm run test`
 
-###### ActivityTester module
+##### ActivityTester module
 The `ActivityTester` module can be imported from `aries-data` into your tests to run full blown tests by using mock input/output files and executing the onTask function. For example, the testing used when flattening json:
 ```javascript
 import JsonFlatten from '..';
