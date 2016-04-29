@@ -28,7 +28,7 @@ Currently, `onTask` should only return a string, which will be loaded to s3 as a
 ##### Decorators
 We provide a few decorators that can be used in any activity, using the following syntax:
 ```javascript
-iimport { Activity, singleS3FileInput, singleS3StreamOutput } from 'aries-data';
+import { Activity, singleS3FileInput, singleS3StreamOutput } from 'aries-data';
 import flatten from 'flat';
 import papa from 'babyparse';
 
