@@ -99,6 +99,16 @@ Typically, adding a new "integration" may only involve writing a single activity
 
 Workflows are not limited in the amount of activities required.  The typical workflow is three steps, but as the project evolves, workflows could contain many steps, with new features like transformations, and enrichment.  They could even branch and take multiple paths, working on things concurrently.
 
+## Why Node.js?
+
+* Performance: Node.js is wicked fast. Really. Look into it.
+* Isomorphic code: A lot of developers are writing code in JavaScript, both client-side and server-side.
+* Less code: Writing less code is better — it leads to increased productivity and fewer bugs. With Node.js, we can write very powerful programs with very few lines of code in a single file.
+* NPM: The npm registry of open-source modules provides a rich library of code to pull into your application. Just about anything that could be written has been written, and you can add these published modules to your package.json as a dependency.
+* Native JSON Support: JSON is the standard data interchange format used by JavaScript, and is easy and natural to work with.
+* Better for microservice architecture: Node.js apps are light (easy to build, deploy, and run), modular (easy to break up and refactor) and I/O driven (asynchronous programming).
+* Open-source community adoption: usage of Node.js continues to rise, many large companies are now running mission-critical applications.
+
 ## Roadmap
 - [ ] Better support for JSON serialization for `onTask` return values.  Some activities might need to output multiple files as its output, and other activities may need to recieve multiple file names.
 - [ ] Abstractions around s3 file uploads.  This could be a `@s3Result` decorator that automatically takes the returned value, uploads/streams it to s3, and returns a JSON object containing s3 keys.  It could also just be a special type of `s3Result` object that wraps the return value(s).
