@@ -208,7 +208,7 @@ var ActivityPoller = (_temp = _class = function (_Poller) {
                                 _context.next = 35;
                                 return this.client.respondActivityTaskFailed({
                                     taskToken: result.taskToken,
-                                    details: '',
+                                    details: _context.t2.toString(),
                                     reason: ''
                                 });
 
