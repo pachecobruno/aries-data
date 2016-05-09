@@ -28,7 +28,7 @@ Currently, `onTask` should only return a string, which will be loaded to s3 as a
 ##### Decorators
 We provide a few decorators that can be used in any activity, using the following syntax:
 ```javascript
-iimport { Activity, singleS3FileInput, singleS3StreamOutput } from 'aries-data';
+import { Activity, singleS3FileInput, singleS3StreamOutput } from 'aries-data';
 import flatten from 'flat';
 import papa from 'babyparse';
 
@@ -76,7 +76,7 @@ When testing an activity, `console.log` doesn't work well due to the output gett
 For consistency, all activites should use [tape](https://github.com/substack/tape) for testing.  You should split the functionality and logic of your integration into separate functions on your activity.  These functions should be pure and operate on nothing but its input values, then return some result that can be tested.  Ideally, your `onTask` function should just be the glue between the other testable functions of your activity.
 - `npm run test`
 
-###### ActivityTester module
+##### ActivityTester module
 The `ActivityTester` module can be imported from `aries-data` into your tests to run full blown tests by using mock input/output files and executing the onTask function. For example, the testing used when flattening json:
 ```javascript
 import JsonFlatten from '..';
@@ -98,6 +98,16 @@ test('flattens a stream', t => async function() {
 Typically, adding a new "integration" may only involve writing a single activity that will be chained to already existing activities to produce the desired workflow.  For example, if you need to get salesforece API data to redshift, you should only need to write the `aries-activity-salesforce-source` activity.  When running as a workflow, your new `aries-activity-salesforce-source` could read data from salesforce and write the json response objects to an s3 object.  The next activity, `aries-activity-json-to-csv` could transform the data from json objects to csv, and load the result to a new s3 object.  Finally, `aries-activity-redshift-sink` could use the csv output and efficiently load the data using the `COPY` command.
 
 Workflows are not limited in the amount of activities required.  The typical workflow is three steps, but as the project evolves, workflows could contain many steps, with new features like transformations, and enrichment.  They could even branch and take multiple paths, working on things concurrently.
+
+## Why Node.js?
+
+* Performance: Node.js is wicked fast. Really. Look into it.
+* Isomorphic code: A lot of developers are writing code in JavaScript, both client-side and server-side.
+* Less code: Writing less code is better — it leads to increased productivity and fewer bugs. With Node.js, we can write very powerful programs with very few lines of code in a single file.
+* NPM: The npm registry of open-source modules provides a rich library of code to pull into your application. Just about anything that could be written has been written, and you can add these published modules to your package.json as a dependency.
+* Native JSON Support: JSON is the standard data interchange format used by JavaScript, and is easy and natural to work with.
+* Better for microservice architecture: Node.js apps are light (easy to build, deploy, and run), modular (easy to break up and refactor) and I/O driven (asynchronous programming).
+* Open-source community adoption: usage of Node.js continues to rise, many large companies are now running mission-critical applications.
 
 ## Roadmap
 - [ ] Better support for JSON serialization for `onTask` return values.  Some activities might need to output multiple files as its output, and other activities may need to recieve multiple file names.
