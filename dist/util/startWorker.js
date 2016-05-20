@@ -24,8 +24,6 @@ var _logger2 = _interopRequireDefault(_logger);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function startWorker(domain, taskList, activities) {
-    var _context;
-
     var log = (0, _logger2.default)(__filename);
 
     log.debug('Preparing to start activity poller.');
@@ -43,5 +41,5 @@ function startWorker(domain, taskList, activities) {
     });
 
     // Wait for all activities to be registered, then start polling.
-    Promise.all(promises).then(poller.start.bind(poller)).catch((_context = this.log).error.bind(_context));
+    Promise.all(promises).then(poller.start.bind(poller)).catch(log.error.bind(log));
 };

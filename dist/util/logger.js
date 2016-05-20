@@ -34,7 +34,7 @@ var Logger = function () {
             serializers: { err: _bunyan2.default.stdSerializers.err },
             streams: streams || [{
                 level: 'trace',
-                stream: (0, _bunyanFormat2.default)({ outputMode: 'short' })
+                stream: (0, _bunyanFormat2.default)({ outputMode: 'long' })
             }, {
                 level: 'trace',
                 path: process.env.LOG_FILE || './app.log'
