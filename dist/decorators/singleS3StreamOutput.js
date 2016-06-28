@@ -11,21 +11,15 @@ exports.default = singleS3StreamOutput;
 
 var _aws = require('../util/aws');
 
-var _streamToPromise = require('stream-to-promise');
-
-var _streamToPromise2 = _interopRequireDefault(_streamToPromise);
-
 var _lodash = require('lodash.isstring');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _s3Streams = require('s3-streams');
-
-var _s3Streams2 = _interopRequireDefault(_s3Streams);
-
 var _uuid = require('uuid');
 
 var _uuid2 = _interopRequireDefault(_uuid);
+
+var _stream = require('stream');
 
 var _highland = require('highland');
 
@@ -83,7 +77,7 @@ function singleS3StreamOutput() {
                 }
 
                 return _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-                    var output, source, readStream, s3Params, writeStream, result;
+                    var output, source, readStream, s3Params, s3Options, result;
                     return regeneratorRuntime.wrap(function _callee$(_context) {
                         while (1) {
                             switch (_context.prev = _context.next) {
@@ -114,21 +108,30 @@ function singleS3StreamOutput() {
 
                                     s3Params = {
                                         Bucket: process.env.AWS_S3_TEMP_BUCKET,
-                                        Key: _uuid2.default.v4()
+                                        Key: _uuid2.default.v4(),
+                                        Body: readStream.pipe(new _stream.PassThrough())
                                     };
-
-                                    // Create write stream.
-
-                                    writeStream = _s3Streams2.default.WriteStream((0, _aws.createS3Client)(true), s3Params);
+                                    s3Options = {
+                                        partSize: 5 * 1024 * 1024,
+                                        queueSize: 5
+                                    };
 
                                     // Upload and wait for stream to finish.
 
                                     _this.log.debug('Streaming ' + s3Params.Key + ' to s3.');
+
                                     _context.next = 12;
-                                    return (0, _streamToPromise2.default)(readStream.pipe(writeStream));
+                                    return new Promise(function (resolve, reject) {
+                                        var s3 = (0, _aws.createS3Client)();
+                                        s3.upload(s3Params, s3Options, function (err, data) {
+                                            if (err) reject(err);
+                                            resolve(data);
+                                        });
+                                    });
 
                                 case 12:
                                     result = _context.sent;
+
 
                                     _this.log.debug('Successfully streamed ' + s3Params.Key + ' to s3.');
 

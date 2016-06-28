@@ -11,9 +11,9 @@ exports.default = singleS3StreamInput;
 
 var _aws = require('../util/aws');
 
-var _s3Streams = require('s3-streams');
+var _s3DownloadStream = require('s3-download-stream');
 
-var _s3Streams2 = _interopRequireDefault(_s3Streams);
+var _s3DownloadStream2 = _interopRequireDefault(_s3DownloadStream);
 
 var _highland = require('highland');
 
@@ -87,7 +87,11 @@ function singleS3StreamInput() {
 
                                     // Get a read stream to the source.
 
-                                    readStream = _s3Streams2.default.ReadStream((0, _aws.createS3Client)(true), s3Params);
+                                    readStream = (0, _s3DownloadStream2.default)({
+                                        client: (0, _aws.createS3Client)(false),
+                                        concurrency: 6,
+                                        params: s3Params
+                                    });
 
                                     // Split chunks by newlines if required.
 
