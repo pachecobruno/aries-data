@@ -102,8 +102,9 @@ function singleS3StreamInput() {
                                     input = _extends({}, activityTask.input, { file: stream });
 
                                     // Create new activityTask replacing the original input with the file.
+                                    // const newActivityTask = activityTask.assign({ input });
 
-                                    newActivityTask = activityTask.assign({ input: input });
+                                    newActivityTask = { input: input };
 
                                     // Create args for original function.
 
