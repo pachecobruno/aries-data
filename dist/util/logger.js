@@ -32,20 +32,35 @@ var Logger = function () {
         this.log = _bunyan2.default.createLogger({
             name: require('../../package.json').name,
             serializers: { err: _bunyan2.default.stdSerializers.err },
-            streams: streams || [{
-                level: 'trace',
-                stream: (0, _bunyanFormat2.default)({ outputMode: 'long' })
-            }, {
-                level: 'trace',
-                path: process.env.LOG_FILE || './app.log'
-            }]
+            streams: streams || this.getDefaultStreams()
         });
     }
 
-    // Create a base logger.
-
-
     _createClass(Logger, [{
+        key: 'getDefaultStreams',
+        value: function getDefaultStreams() {
+            // Default log level.
+            var level = 'trace';
+
+            var stdout = {
+                level: level,
+                stream: (0, _bunyanFormat2.default)({ outputMode: 'simple', color: false })
+            };
+
+            // XXX: We can remove this once we full transition to airflow.
+            // Only required for cloudwatch logs.
+            var file = {
+                level: level,
+                path: process.env.LOG_FILE || './app.log'
+            };
+
+            // Return array with our default stream.
+            return [stdout, file];
+        }
+
+        // Create a base logger.
+
+    }, {
         key: 'createLogger',
         value: function createLogger(options) {
             // If a string is passed, just use it for the name.
