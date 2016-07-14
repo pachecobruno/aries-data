@@ -64,7 +64,7 @@ var Activity = (_temp = _class = function () {
     return Activity;
 }(), _class.props = {
     defaultTaskHeartbeatTimeout: '900',
-    defaultTaskScheduleToStartTimeout: '900',
+    defaultTaskScheduleToStartTimeout: '1800',
     defaultTaskScheduleToCloseTimeout: '3800',
     defaultTaskStartToCloseTimeout: '3600'
 }, _temp);
