@@ -38,7 +38,7 @@ var Activity = (_temp = _class = function () {
     _createClass(Activity, [{
         key: 'onTask',
         value: function () {
-            var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(activityTask) {
+            var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(activityTask) {
                 return regeneratorRuntime.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
@@ -54,7 +54,7 @@ var Activity = (_temp = _class = function () {
             }));
 
             function onTask(_x) {
-                return ref.apply(this, arguments);
+                return _ref.apply(this, arguments);
             }
 
             return onTask;

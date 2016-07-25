@@ -25,7 +25,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  * ActivityTask
  * Simple wrapper around an activity task poll reponse.
  */
-
 var ActivityTask = function (_Task) {
   _inherits(ActivityTask, _Task);
 

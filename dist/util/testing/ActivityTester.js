@@ -107,7 +107,7 @@ var ActivityTester = (_dec = (0, _logger2.default)(), _dec(_class = (_temp = _cl
     }, {
         key: 'onTask',
         value: function () {
-            var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(activityTask) {
+            var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(activityTask) {
                 for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
                     args[_key - 1] = arguments[_key];
                 }
@@ -134,7 +134,7 @@ var ActivityTester = (_dec = (0, _logger2.default)(), _dec(_class = (_temp = _cl
             }));
 
             function onTask(_x, _x2) {
-                return ref.apply(this, arguments);
+                return _ref.apply(this, arguments);
             }
 
             return onTask;

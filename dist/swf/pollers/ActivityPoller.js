@@ -49,7 +49,6 @@ var ActivityPoller = (_temp = _class = function (_Poller) {
         _classCallCheck(this, ActivityPoller);
 
         // Check for activities
-
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ActivityPoller).call(this, config));
 
         if (!activities instanceof Array) {
@@ -108,7 +107,7 @@ var ActivityPoller = (_temp = _class = function (_Poller) {
     }, {
         key: '_onTask',
         value: function () {
-            var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(result) {
+            var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(result) {
                 var activityType, Activity, task, config, args, activity, start, output, _process$hrtime, _process$hrtime2, seconds;
 
                 return regeneratorRuntime.wrap(function _callee$(_context) {
@@ -221,7 +220,7 @@ var ActivityPoller = (_temp = _class = function (_Poller) {
             }));
 
             function _onTask(_x) {
-                return ref.apply(this, arguments);
+                return _ref.apply(this, arguments);
             }
 
             return _onTask;

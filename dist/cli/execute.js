@@ -7,9 +7,8 @@ Object.defineProperty(exports, "__esModule", {
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 // Run the task, keep some stats.
-
 var runTask = function () {
-    var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(handler, args) {
+    var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(handler, args) {
         var start, output, _process$hrtime, _process$hrtime2, seconds, duration;
 
         return regeneratorRuntime.wrap(function _callee$(_context) {
@@ -52,7 +51,7 @@ var runTask = function () {
     }));
 
     return function runTask(_x, _x2) {
-        return ref.apply(this, arguments);
+        return _ref.apply(this, arguments);
     };
 }();
 
@@ -83,9 +82,9 @@ var parse = function parse(arg) {
 // Export function to execute aries repos.
 
 exports.default = function () {
-    var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(_ref) {
-        var repo = _ref.repo;
-        var _ = _ref._;
+    var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(_ref3) {
+        var repo = _ref3.repo;
+        var _ = _ref3._;
         var args, pkg, Module, handler, output;
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
             while (1) {
@@ -143,7 +142,7 @@ exports.default = function () {
     }));
 
     function execute(_x3) {
-        return ref.apply(this, arguments);
+        return _ref2.apply(this, arguments);
     }
 
     return execute;

@@ -17,9 +17,8 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 /**
  * Export a function to register activities with SWF
  */
-
 exports.default = function () {
-    var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(domain, config) {
+    var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(domain, config) {
         var log, client, activityTypes, matchedActivity, fullConfig;
         return regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
@@ -76,7 +75,7 @@ exports.default = function () {
     }));
 
     function registerActivity(_x, _x2) {
-        return ref.apply(this, arguments);
+        return _ref.apply(this, arguments);
     }
 
     return registerActivity;

@@ -12,7 +12,6 @@ var Task = function () {
     /**
      * Copy all incoming tasks properties to self.
      */
-
     function Task(task) {
         _classCallCheck(this, Task);
 

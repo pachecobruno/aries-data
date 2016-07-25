@@ -23,7 +23,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  * Decision Task
  * Simple wrapper around a decision task poll response.
  */
-
 var DecisionTask = function (_Task) {
     _inherits(DecisionTask, _Task);
 

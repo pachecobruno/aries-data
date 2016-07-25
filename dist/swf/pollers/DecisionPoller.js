@@ -37,7 +37,6 @@ var DecisionPoller = (_temp = _class = function (_Poller) {
         _classCallCheck(this, DecisionPoller);
 
         // Check for decider.
-
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DecisionPoller).call(this, config));
 
         if (!Decider) {
@@ -54,7 +53,7 @@ var DecisionPoller = (_temp = _class = function (_Poller) {
     _createClass(DecisionPoller, [{
         key: '_onTask',
         value: function () {
-            var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(result) {
+            var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(result) {
                 var task, decisions;
                 return regeneratorRuntime.wrap(function _callee$(_context) {
                     while (1) {
@@ -123,7 +122,7 @@ var DecisionPoller = (_temp = _class = function (_Poller) {
             }));
 
             function _onTask(_x) {
-                return ref.apply(this, arguments);
+                return _ref.apply(this, arguments);
             }
 
             return _onTask;

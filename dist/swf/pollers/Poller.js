@@ -78,7 +78,7 @@ var Poller = (_dec = (0, _logger2.default)(), _dec(_class = (_temp = _class2 = f
     }, {
         key: 'poll',
         value: function () {
-            var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+            var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
                 var pollMethod, result;
                 return regeneratorRuntime.wrap(function _callee$(_context) {
                     while (1) {
@@ -141,7 +141,7 @@ var Poller = (_dec = (0, _logger2.default)(), _dec(_class = (_temp = _class2 = f
             }));
 
             function poll() {
-                return ref.apply(this, arguments);
+                return _ref.apply(this, arguments);
             }
 
             return poll;

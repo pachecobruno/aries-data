@@ -25,7 +25,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Logger = function () {
 
     // Create a default logger.
-
     function Logger(streams) {
         _classCallCheck(this, Logger);
 

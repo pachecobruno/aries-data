@@ -48,7 +48,7 @@ var Decider = (_dec = (0, _logger2.default)(), _dec(_class = function () {
     _createClass(Decider, [{
         key: 'onTask',
         value: function () {
-            var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(decisionTask) {
+            var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(decisionTask) {
                 var newEvents, decisions, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, e, methodName, attrsKey, decision;
 
                 return regeneratorRuntime.wrap(function _callee$(_context) {
@@ -158,7 +158,7 @@ var Decider = (_dec = (0, _logger2.default)(), _dec(_class = function () {
             }));
 
             function onTask(_x) {
-                return ref.apply(this, arguments);
+                return _ref.apply(this, arguments);
             }
 
             return onTask;
