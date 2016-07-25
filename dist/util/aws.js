@@ -6,6 +6,10 @@ Object.defineProperty(exports, "__esModule", {
 exports.createSWFClient = createSWFClient;
 exports.createS3Client = createS3Client;
 
+var _https = require('https');
+
+var _https2 = _interopRequireDefault(_https);
+
 var _awsSdk = require('aws-sdk');
 
 var _awsSdk2 = _interopRequireDefault(_awsSdk);
@@ -15,6 +19,15 @@ var _thenifyAll = require('thenify-all');
 var _thenifyAll2 = _interopRequireDefault(_thenifyAll);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_awsSdk2.default.config.update({
+    httpOptions: {
+        timeout: 15000,
+        agent: new _https2.default.Agent({
+            maxSockets: 1024
+        })
+    }
+});
 
 function createSWFClient() {
     var raw = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
