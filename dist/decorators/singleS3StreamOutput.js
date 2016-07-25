@@ -112,8 +112,8 @@ function singleS3StreamOutput() {
                                         Body: readStream.pipe(new _stream.PassThrough())
                                     };
                                     s3Options = {
-                                        partSize: 5 * 1024 * 1024,
-                                        queueSize: 5
+                                        // partSize: 5 * 1024 * 1024,
+                                        // queueSize: 5,
                                     };
 
                                     // Upload and wait for stream to finish.
@@ -124,8 +124,14 @@ function singleS3StreamOutput() {
                                     return new Promise(function (resolve, reject) {
                                         var s3 = (0, _aws.createS3Client)();
                                         s3.upload(s3Params, s3Options, function (err, data) {
-                                            if (err) reject(err);
-                                            resolve(data);
+                                            if (err) {
+                                                _this.log.error('An error occured uploading to s3');
+                                                _this.log.error(err);
+                                                reject(err);
+                                            } else {
+                                                _this.log.debug('Resolving upload.');
+                                                resolve(data);
+                                            }
                                         });
                                     });
 
