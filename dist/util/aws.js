@@ -22,7 +22,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 _awsSdk2.default.config.update({
     httpOptions: {
-        timeout: 15000,
         agent: new _https2.default.Agent({
             maxSockets: 1024
         })
