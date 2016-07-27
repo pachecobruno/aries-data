@@ -20,13 +20,13 @@ var _thenifyAll2 = _interopRequireDefault(_thenifyAll);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_awsSdk2.default.config.update({
-    httpOptions: {
-        agent: new _https2.default.Agent({
-            maxSockets: 1024
-        })
-    }
-});
+// AWS.config.update({
+//     httpOptions: {
+//         agent: new https.Agent({
+//             maxSockets: 1024,
+//         }),
+//     },
+// });
 
 function createSWFClient() {
     var raw = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
