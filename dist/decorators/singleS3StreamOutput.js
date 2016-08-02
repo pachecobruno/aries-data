@@ -11,6 +11,10 @@ exports.default = singleS3StreamOutput;
 
 var _aws = require('../util/aws');
 
+var _logger = require('../util/logger');
+
+var _logger2 = _interopRequireDefault(_logger);
+
 var _lodash = require('lodash.isstring');
 
 var _lodash2 = _interopRequireDefault(_lodash);
@@ -28,6 +32,8 @@ var _highland2 = _interopRequireDefault(_highland);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
+
+var log = (0, _logger2.default)(__filename);
 
 /**
  * Apply split/json stringify transform streams.
@@ -122,11 +128,17 @@ function singleS3StreamOutput() {
 
                                     _context.next = 12;
                                     return new Promise(function (resolve, reject) {
+                                        // Get a new s3 client.
                                         var s3 = (0, _aws.createS3Client)();
-                                        s3.upload(s3Params, s3Options, function (err, data) {
+
+                                        // Start upload.
+                                        var managedUpload = s3.upload(s3Params, s3Options, function (err, data) {
                                             if (err) return reject(err);
                                             resolve(data);
                                         });
+
+                                        // Watch for input errors, and abort if we have one.
+                                        readStream.on('error', managedUpload.abort.bind(managedUpload));
                                     });
 
                                 case 12:
