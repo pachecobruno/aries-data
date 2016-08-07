@@ -43,7 +43,7 @@ function createS3Client() {
     var client = new _awsSdk2.default.S3({ region: process.env.AWS_REGION });
     if (raw) return client;
 
-    return (0, _thenifyAll2.default)(client, client, ['getObject', 'putObject', 'deleteObject',
+    return (0, _thenifyAll2.default)(client, client, ['completeMultipartUpload', 'createMultipartUpload', 'deleteObject', 'getObject', 'putObject', 'listObjects', 'listObjectsV2',
     // 'upload',
-    'listObjects']);
+    'uploadPartCopy']);
 };
