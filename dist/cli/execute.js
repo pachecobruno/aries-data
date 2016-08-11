@@ -119,30 +119,26 @@ exports.default = function () {
                         output = _context2.sent;
 
 
-                        // Log raw output.
-                        log.debug('Output:');
-                        log.debug(output);
-
                         // Stringify the final output and log it to STDOUT for airflow, with no bunyan chrome.
                         log.debug('Task return value:');
                         console.log(JSON.stringify(output));
 
-                        _context2.next = 19;
+                        _context2.next = 17;
                         break;
 
-                    case 15:
-                        _context2.prev = 15;
+                    case 13:
+                        _context2.prev = 13;
                         _context2.t0 = _context2['catch'](0);
 
                         log.error('Error executing task:', _context2.t0);
                         process.exit(1);
 
-                    case 19:
+                    case 17:
                     case 'end':
                         return _context2.stop();
                 }
             }
-        }, _callee2, this, [[0, 15]]);
+        }, _callee2, this, [[0, 13]]);
     }));
 
     function execute(_x3) {
