@@ -17,17 +17,19 @@ var runTask = function () {
                     case 0:
                         // Log out arguments.
                         log.debug('Executing task with ' + args.length + ' args.');
-                        // args.forEach((arg, i) => log.debug(`${i} ->`, arg));
+                        args.forEach(function (arg, i) {
+                            return log.debug(i + ' ->', arg);
+                        });
 
                         // Start timer.
                         start = process.hrtime();
 
                         // Attempt to execute the task.
 
-                        _context.next = 4;
+                        _context.next = 5;
                         return handler.onTask.apply(handler, args);
 
-                    case 4:
+                    case 5:
                         output = _context.sent;
 
 
@@ -42,7 +44,7 @@ var runTask = function () {
                         // Mimic legacy SWF behavior.
                         return _context.abrupt('return', { input: output });
 
-                    case 11:
+                    case 12:
                     case 'end':
                         return _context.stop();
                 }
