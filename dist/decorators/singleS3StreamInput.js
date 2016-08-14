@@ -57,7 +57,6 @@ function applyTransforms(source, split) {
  */
 function singleS3StreamInput() {
     var split = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
-    var removeAfter = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
 
     // Return a decorator.
     return function (target, key, descriptor) {
@@ -118,7 +117,7 @@ function singleS3StreamInput() {
                                 case 8:
                                     result = _context.sent;
 
-                                    if (!removeAfter) {
+                                    if (!process.env.ARIES_REMOVE_FILES_AFTER_TASK) {
                                         _context.next = 14;
                                         break;
                                     }

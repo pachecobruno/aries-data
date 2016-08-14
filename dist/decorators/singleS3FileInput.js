@@ -18,8 +18,6 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
  * @returns {Object} Result of decorated function.
  */
 function singleS3FileInput() {
-    var removeAfter = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
-
     // Return a decorator.
     return function (target, key, descriptor) {
         // Copy of the original function.
@@ -82,7 +80,7 @@ function singleS3FileInput() {
                                 case 10:
                                     result = _context.sent;
 
-                                    if (!removeAfter) {
+                                    if (!process.env.ARIES_REMOVE_FILES_AFTER_TASK) {
                                         _context.next = 15;
                                         break;
                                     }
