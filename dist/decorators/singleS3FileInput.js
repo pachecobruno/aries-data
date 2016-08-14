@@ -41,6 +41,15 @@ function singleS3FileInput() {
                         while (1) {
                             switch (_context.prev = _context.next) {
                                 case 0:
+                                    if ((activityTask.input || {}).key) {
+                                        _context.next = 2;
+                                        break;
+                                    }
+
+                                    return _context.abrupt('return');
+
+                                case 2:
+
                                     // Create params.
                                     params = {
                                         Bucket: process.env.AWS_S3_TEMP_BUCKET,
@@ -49,10 +58,10 @@ function singleS3FileInput() {
 
                                     // Download file.
 
-                                    _context.next = 3;
+                                    _context.next = 5;
                                     return client.getObject(params);
 
-                                case 3:
+                                case 5:
                                     response = _context.sent;
 
 
@@ -74,27 +83,27 @@ function singleS3FileInput() {
 
                                     // Return the result.
 
-                                    _context.next = 10;
+                                    _context.next = 12;
                                     return callback.apply(_this, newArgs);
 
-                                case 10:
+                                case 12:
                                     result = _context.sent;
 
                                     if (!process.env.ARIES_REMOVE_FILES_AFTER_TASK) {
-                                        _context.next = 15;
+                                        _context.next = 17;
                                         break;
                                     }
 
-                                    _context.next = 14;
+                                    _context.next = 16;
                                     return client.deleteObject(params);
 
-                                case 14:
+                                case 16:
                                     _this.log.info('Deleted ' + params.Key);
 
-                                case 15:
+                                case 17:
                                     return _context.abrupt('return', result);
 
-                                case 16:
+                                case 18:
                                 case 'end':
                                     return _context.stop();
                             }

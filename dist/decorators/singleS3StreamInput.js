@@ -78,6 +78,15 @@ function singleS3StreamInput() {
                         while (1) {
                             switch (_context.prev = _context.next) {
                                 case 0:
+                                    if ((activityTask.input || {}).key) {
+                                        _context.next = 2;
+                                        break;
+                                    }
+
+                                    return _context.abrupt('return');
+
+                                case 2:
+
                                     // Location of s3 file.
                                     s3Params = {
                                         Bucket: process.env.AWS_S3_TEMP_BUCKET,
@@ -111,28 +120,28 @@ function singleS3StreamInput() {
 
                                     // Return the result.
 
-                                    _context.next = 8;
+                                    _context.next = 10;
                                     return callback.apply(_this, newArgs);
 
-                                case 8:
+                                case 10:
                                     result = _context.sent;
 
                                     if (!process.env.ARIES_REMOVE_FILES_AFTER_TASK) {
-                                        _context.next = 14;
+                                        _context.next = 16;
                                         break;
                                     }
 
                                     client = (0, _aws.createS3Client)();
-                                    _context.next = 13;
+                                    _context.next = 15;
                                     return client.deleteObject(s3Params);
 
-                                case 13:
+                                case 15:
                                     _this.log.info('Deleted ' + s3Params.Key);
 
-                                case 14:
+                                case 16:
                                     return _context.abrupt('return', result);
 
-                                case 15:
+                                case 17:
                                 case 'end':
                                     return _context.stop();
                             }
