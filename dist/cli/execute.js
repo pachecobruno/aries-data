@@ -136,11 +136,18 @@ exports.default = function () {
                         throw _context2.t0;
 
                     case 17:
+                        _context2.prev = 17;
+
+                        // Log out final message.
+                        log.debug('Finished executing task.');
+                        return _context2.finish(17);
+
+                    case 20:
                     case 'end':
                         return _context2.stop();
                 }
             }
-        }, _callee2, this, [[0, 13]]);
+        }, _callee2, this, [[0, 13, 17, 20]]);
     }));
 
     function execute(_x3) {
