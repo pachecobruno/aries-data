@@ -85,7 +85,7 @@ exports.default = function () {
     var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(_ref3) {
         var repo = _ref3.repo;
         var _ = _ref3._;
-        var args, pkg, Module, handler, output;
+        var args, pkg, Module, handler, result;
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
             while (1) {
                 switch (_context2.prev = _context2.next) {
@@ -95,7 +95,7 @@ exports.default = function () {
                         // Parse args.
                         args = _.map(parse);
 
-                        // Require in the module.
+                        // Require in the specified module.
 
                         pkg = require(repo || process.cwd());
 
@@ -116,22 +116,24 @@ exports.default = function () {
                         return runTask(handler, args);
 
                     case 8:
-                        output = _context2.sent;
+                        result = _context2.sent;
 
 
-                        // Stringify the final output and log it to STDOUT for airflow, with no bunyan chrome.
-                        log.debug('Task return value:');
-                        console.log(JSON.stringify(output));
+                        // Log the result.
+                        log.debug('Task result: ', result);
 
-                        _context2.next = 17;
-                        break;
+                        // Return the result.
+                        return _context2.abrupt('return', result);
 
                     case 13:
                         _context2.prev = 13;
                         _context2.t0 = _context2['catch'](0);
 
+                        // Log the error.
                         log.error('Error executing task:', _context2.t0);
-                        process.exit(1);
+
+                        // Rethrow the error.
+                        throw _context2.t0;
 
                     case 17:
                     case 'end':
