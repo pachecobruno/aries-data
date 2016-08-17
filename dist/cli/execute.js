@@ -58,6 +58,7 @@ var runTask = exports.runTask = function () {
 }();
 
 exports.parse = parse;
+exports.JSONparse = JSONparse;
 
 var _moment = require('moment');
 
@@ -165,5 +166,16 @@ function parse(args) {
 
     // Return the parsed version.
 
-    return [JSON.parse(task), JSON.parse(config), new Date(executionDate)];
+    return [JSONparse(task), JSONparse(config), new Date(executionDate)];
+};
+
+/**
+ * Helper function to return the original string if json parse fails.
+ */
+function JSONparse(str) {
+    try {
+        return JSON.parse(str);
+    } catch (err) {
+        return str;
+    }
 };

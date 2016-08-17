@@ -49,3 +49,12 @@ test('parse arguments', t => {
     t.deepEqual(parsedExecutionDate, new Date(executionDate));
     t.end();
 });
+
+test('parses a non json object', t => {
+    const task = 'None';
+
+    const [ parsedTask ] = parse([task]);
+
+    t.equal(parsedTask, task);
+    t.end();
+});
