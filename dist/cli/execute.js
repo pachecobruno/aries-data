@@ -3,32 +3,34 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.runTask = undefined;
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-// Run the task, keep some stats.
-var runTask = function () {
-    var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(handler, args) {
+/**
+ * Apply the cli arguments to the module.
+ */
+var runTask = exports.runTask = function () {
+    var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(handler, args) {
         var start, output, _process$hrtime, _process$hrtime2, seconds, duration;
 
-        return regeneratorRuntime.wrap(function _callee$(_context) {
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
             while (1) {
-                switch (_context.prev = _context.next) {
+                switch (_context2.prev = _context2.next) {
                     case 0:
                         // Log out arguments.
                         log.debug('Executing task with ' + args.length + ' args.');
-                        // args.forEach((arg, i) => log.debug(`${i} ->`, arg));
 
                         // Start timer.
                         start = process.hrtime();
 
                         // Attempt to execute the task.
 
-                        _context.next = 4;
+                        _context2.next = 4;
                         return handler.onTask.apply(handler, args);
 
                     case 4:
-                        output = _context.sent;
+                        output = _context2.sent;
 
 
                         // Get duration.
@@ -40,20 +42,22 @@ var runTask = function () {
                         log.debug('Task executed in ' + duration + ' (' + seconds + ' sec).');
 
                         // Mimic legacy SWF behavior.
-                        return _context.abrupt('return', { input: output });
+                        return _context2.abrupt('return', { input: output });
 
                     case 11:
                     case 'end':
-                        return _context.stop();
+                        return _context2.stop();
                 }
             }
-        }, _callee, this);
+        }, _callee2, this);
     }));
 
-    return function runTask(_x, _x2) {
-        return _ref.apply(this, arguments);
+    return function runTask(_x2, _x3) {
+        return _ref3.apply(this, arguments);
     };
 }();
+
+exports.parse = parse;
 
 var _moment = require('moment');
 
@@ -70,33 +74,22 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 // Create logger.
 var log = (0, _logger2.default)(__filename);
 
-// Function to parse json if it can.
-var parse = function parse(arg) {
-    try {
-        return JSON.parse(arg);
-    } catch (e) {
-        return arg;
-    }
-};;
-
-// Export function to execute aries repos.
+/**
+ * Execute an aries module.
+ */
 
 exports.default = function () {
-    var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(_ref3) {
-        var repo = _ref3.repo;
-        var _ = _ref3._;
-        var args, pkg, Module, handler, result;
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+    var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(_ref2) {
+        var repo = _ref2.repo;
+        var args = _ref2._;
+        var pkg, Module, handler, result;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
-                switch (_context2.prev = _context2.next) {
+                switch (_context.prev = _context.next) {
                     case 0:
-                        _context2.prev = 0;
-
-                        // Parse args.
-                        args = _.map(parse);
+                        _context.prev = 0;
 
                         // Require in the specified module.
-
                         pkg = require(repo || process.cwd());
 
                         // Grab `default` if it exists.
@@ -112,47 +105,65 @@ exports.default = function () {
 
                         // Run the handler and get the output.
 
-                        _context2.next = 8;
-                        return runTask(handler, args);
+                        _context.next = 7;
+                        return runTask(handler, parse(args));
 
-                    case 8:
-                        result = _context2.sent;
+                    case 7:
+                        result = _context.sent;
 
 
                         // Log the result.
                         log.debug('Task result: ', result);
 
                         // Return the result.
-                        return _context2.abrupt('return', result);
+                        return _context.abrupt('return', result);
 
-                    case 13:
-                        _context2.prev = 13;
-                        _context2.t0 = _context2['catch'](0);
+                    case 12:
+                        _context.prev = 12;
+                        _context.t0 = _context['catch'](0);
 
                         // Log the error.
-                        log.error('Error executing task:', _context2.t0);
+                        log.error('Error executing task:', _context.t0);
 
                         // Rethrow the error.
-                        throw _context2.t0;
+                        throw _context.t0;
 
-                    case 17:
-                        _context2.prev = 17;
+                    case 16:
+                        _context.prev = 16;
 
                         // Log out final message.
                         log.debug('Finished executing task.');
-                        return _context2.finish(17);
+                        return _context.finish(16);
 
-                    case 20:
+                    case 19:
                     case 'end':
-                        return _context2.stop();
+                        return _context.stop();
                 }
             }
-        }, _callee2, this, [[0, 13, 17, 20]]);
+        }, _callee, this, [[0, 12, 16, 19]]);
     }));
 
-    function execute(_x3) {
-        return _ref2.apply(this, arguments);
+    function execute(_x) {
+        return _ref.apply(this, arguments);
     }
 
     return execute;
 }();
+
+;
+
+/**
+ * Parse strings from cli.
+ */
+function parse(args) {
+    // Destructure.
+    var _args3 = _slicedToArray(args, 3);
+
+    var task = _args3[0];
+    var config = _args3[1];
+    var executionDate = _args3[2];
+
+    // Return the parsed version.
+
+    return [JSON.parse(task), JSON.parse(config), new Date(executionDate)];
+};

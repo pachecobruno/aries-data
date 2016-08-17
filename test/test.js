@@ -1,11 +1,11 @@
 import test from 'blue-tape';
-import execute from '../lib/cli/execute';
+import execute, { parse } from '../lib/cli/execute';
 
 test('execute a good activity', t => async function() {
     // String params, from airflow.
     const task = '{}';
     const config = '{}';
-    const executionDate = '';
+    const executionDate = '2016-08-17T19:30:00';
 
     // Absolute path to mock activity.
     const repo = `${process.cwd()}/test/goodActivity`;
@@ -24,7 +24,7 @@ test('execute a bad activity', t => {
     // String params, from airflow.
     const task = '{}';
     const config = '{}';
-    const executionDate = '';
+    const executionDate = '2016-08-17T19:30:00';
 
     // Absolute path to mock activity.
     const repo = `${process.cwd()}/test/badActivity`;
@@ -34,4 +34,18 @@ test('execute a bad activity', t => {
 
     // Assert that the promise should fail.
     return t.shouldFail(execute(params));
+});
+
+test('parse arguments', t => {
+    const task = '{ "key": "val" }';
+    const config = '{}';
+    const executionDate = '2016-08-17T19:30:00';
+    const args = [task, config, executionDate];
+
+    const [parsedTask, parsedConfig, parsedExecutionDate ] = parse(args);
+
+    t.deepEqual(parsedTask, { key: "val" });
+    t.deepEqual(parsedConfig, {});
+    t.deepEqual(parsedExecutionDate, new Date(executionDate));
+    t.end();
 });
