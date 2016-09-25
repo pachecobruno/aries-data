@@ -73,7 +73,8 @@ function singleS3StreamInput() {
                 }
 
                 return _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-                    var s3Params, readStream, stream, input, newActivityTask, newArgs, result, client;
+                    var s3Params, client, head, readStream, stream, input, newActivityTask, newArgs, result, _client;
+
                     return regeneratorRuntime.wrap(function _callee$(_context) {
                         while (1) {
                             switch (_context.prev = _context.next) {
@@ -93,8 +94,28 @@ function singleS3StreamInput() {
                                         Key: activityTask.input.key
                                     };
 
-                                    // Get a read stream to the source.
+                                    // Create S3 client.
 
+                                    client = (0, _aws.createS3Client)();
+
+                                    // Check if file is zero lenth.
+
+                                    _context.next = 6;
+                                    return client.headObject(s3Params);
+
+                                case 6:
+                                    head = _context.sent;
+
+                                    if (!(head.ContentLength === 0)) {
+                                        _context.next = 9;
+                                        break;
+                                    }
+
+                                    return _context.abrupt('return');
+
+                                case 9:
+
+                                    // Get a read stream to the source.
                                     readStream = (0, _s3DownloadStream2.default)({
                                         client: (0, _aws.createS3Client)(false),
                                         concurrency: 6,
@@ -120,28 +141,28 @@ function singleS3StreamInput() {
 
                                     // Return the result.
 
-                                    _context.next = 10;
+                                    _context.next = 16;
                                     return callback.apply(_this, newArgs);
 
-                                case 10:
+                                case 16:
                                     result = _context.sent;
 
                                     if (!process.env.ARIES_REMOVE_FILES_AFTER_TASK) {
-                                        _context.next = 16;
+                                        _context.next = 22;
                                         break;
                                     }
 
-                                    client = (0, _aws.createS3Client)();
-                                    _context.next = 15;
-                                    return client.deleteObject(s3Params);
+                                    _client = (0, _aws.createS3Client)();
+                                    _context.next = 21;
+                                    return _client.deleteObject(s3Params);
 
-                                case 15:
+                                case 21:
                                     _this.log.info('Deleted ' + s3Params.Key);
 
-                                case 16:
+                                case 22:
                                     return _context.abrupt('return', result);
 
-                                case 17:
+                                case 23:
                                 case 'end':
                                     return _context.stop();
                             }

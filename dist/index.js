@@ -3,32 +3,14 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.logger = exports.setLogStreams = exports.createLogger = exports.ActivityTester = exports.startDecider = exports.startWorker = exports.singleS3StreamOutput = exports.singleS3StreamInput = exports.singleS3FileOutput = exports.singleS3FileInput = exports.registerActivity = exports.Decider = exports.Activity = exports.aws = undefined;
+exports.logger = exports.setLogStreams = exports.createLogger = exports.singleS3StreamOutput = exports.singleS3StreamInput = exports.singleS3FileOutput = exports.singleS3FileInput = exports.Activity = exports.aws = undefined;
 
-var _Activity = require('./swf/Activity');
+var _Activity = require('./Activity');
 
 Object.defineProperty(exports, 'Activity', {
   enumerable: true,
   get: function get() {
     return _interopRequireDefault(_Activity).default;
-  }
-});
-
-var _Decider = require('./swf/Decider');
-
-Object.defineProperty(exports, 'Decider', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_Decider).default;
-  }
-});
-
-var _registerActivity = require('./swf/registerActivity');
-
-Object.defineProperty(exports, 'registerActivity', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_registerActivity).default;
   }
 });
 
@@ -65,33 +47,6 @@ Object.defineProperty(exports, 'singleS3StreamOutput', {
   enumerable: true,
   get: function get() {
     return _interopRequireDefault(_singleS3StreamOutput).default;
-  }
-});
-
-var _startWorker = require('./util/startWorker');
-
-Object.defineProperty(exports, 'startWorker', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_startWorker).default;
-  }
-});
-
-var _startDecider = require('./util/startDecider');
-
-Object.defineProperty(exports, 'startDecider', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_startDecider).default;
-  }
-});
-
-var _ActivityTester = require('./util/testing/ActivityTester');
-
-Object.defineProperty(exports, 'ActivityTester', {
-  enumerable: true,
-  get: function get() {
-    return _interopRequireDefault(_ActivityTester).default;
   }
 });
 

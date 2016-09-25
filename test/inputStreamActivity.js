@@ -1,14 +1,15 @@
-import { Activity } from '../lib/index';
+import { Activity, singleS3StreamInput } from '../lib/index';
 
 export default class MockActivity extends Activity {
 
     static props = {
-        name: 'bad-activity',
+        name: 'input-stream-activity',
         version: '1.0.0',
     };
 
+    @singleS3StreamInput()
     async onTask(task, config, executionDate) {
-        throw new Error(`I'm terrible!`);
+        return 'result';
     }
 };
 

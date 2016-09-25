@@ -7,9 +7,7 @@ exports.default = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _class, _temp;
-
-var _logger = require('../util/logger');
+var _logger = require('./util/logger');
 
 var _logger2 = _interopRequireDefault(_logger);
 
@@ -22,14 +20,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /**
  * Base Activity
  */
-var Activity = (_temp = _class = function () {
+var Activity = function () {
     function Activity() {
         _classCallCheck(this, Activity);
 
         var props = this.constructor.props;
 
-        if (!(props.name && props.version)) {
-            throw new Error('Activities require a name and version');
+        if (!props.name) {
+            throw new Error('Activities require a name.');
         }
 
         this.log = (0, _logger2.default)('activity:' + props.name);
@@ -62,11 +60,7 @@ var Activity = (_temp = _class = function () {
     }]);
 
     return Activity;
-}(), _class.props = {
-    defaultTaskHeartbeatTimeout: '900',
-    defaultTaskScheduleToStartTimeout: '1800',
-    defaultTaskScheduleToCloseTimeout: '3800',
-    defaultTaskStartToCloseTimeout: '3600'
-}, _temp);
+}();
+
 exports.default = Activity;
 ;

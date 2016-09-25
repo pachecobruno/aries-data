@@ -1,4 +1,4 @@
-import { Activity } from '..';
+import { Activity } from '../lib/index';
 
 export default class MockActivity extends Activity {
 

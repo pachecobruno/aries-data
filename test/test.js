@@ -1,4 +1,5 @@
 import test from 'blue-tape';
+import nock from 'nock';
 import execute, { parse } from '../lib/cli/execute';
 
 test('execute a good activity', t => async function() {
@@ -58,3 +59,28 @@ test('parses a non json object', t => {
     t.equal(parsedTask, task);
     t.end();
 });
+
+test.skip('singleS3StreamInput exits early with no data', t => async function() {
+    // String params, from airflow.
+    const task = '{"input":{"key":"someobject"}}';
+    const config = '{}';
+    const executionDate = '2016-08-17T19:30:00';
+
+    // // Mock up env var.
+    process.env.AWS_S3_TEMP_BUCKET = 'astronomer-workflows';
+    process.env.AWS_REGION = 'us-east-1';
+
+    // Absolute path to mock activity.
+    const repo = `${process.cwd()}/test/inputStreamActivity`;
+
+    // Construct param object.
+    const params = { repo, _: [task, config, executionDate] };
+
+    nock(`https://${process.env.AWS_S3_TEMP_BUCKET}.s3.amazonaws.com`);
+
+    // Execute!
+    const result = await execute(params);
+
+    // Make sure we have input and the result from the mock task.
+    t.equal(result.input, 'result');
+}());
