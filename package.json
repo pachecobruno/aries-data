@@ -10,7 +10,7 @@
     "clean": "rm -rf dist",
     "tail": "tail -f app.log | bunyan -o short",
     "build-src": "npm run clean && babel lib -d dist",
-    "build-image": "docker build -t astronomerio/aries-data .",
+    "build-image": "docker build -t astronomerio/aries-data-dev .",
     "build": "npm run build-src"
   },
   "bin": {
