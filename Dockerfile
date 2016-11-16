@@ -13,10 +13,8 @@ RUN dpkg -x forticlient-sslvpn_amd64.deb /usr/share/forticlient
 # Run setup
 RUN /usr/share/forticlient/opt/forticlient-sslvpn/64bit/helper/setup.linux.sh 2
 
-# ADD forticlient /usr/local/bin/forticlient
-
 # Add standard files on downstream builds.
-ADD forticlient /usr/local/bin/forticlient
+ADD forticlient /usr/local/bin/
 ONBUILD ADD lib /usr/local/src/lib
 ONBUILD ADD package.json /usr/local/src/
 ONBUILD ADD .babelrc /usr/local/src/
