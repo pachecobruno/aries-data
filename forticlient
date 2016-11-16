@@ -2,6 +2,7 @@
 
 set timeout $env(VPNTIMEOUT)
 
+# Setup masquerade, to allow using the container as a gateway
 spawn "/usr/share/forticlient/opt/forticlient-sslvpn/64bit/forticlientsslvpn_cli" --server $env(VPNADDR) --vpnuser $env(VPNUSER) --keepalive
 
 # Send command
@@ -17,7 +18,7 @@ expect -exact "Would you like to connect to this server? (Y/N)" {
 
 # Expect tunnel to actually start
 expect {
-  "STATUS::Connected" {
+  "STATUS::Tunnel running" {
   } timeout {
     send_user -- "Failed to bring tunnel up after $env(VPNTIMEOUT)s\n"
     exit 1

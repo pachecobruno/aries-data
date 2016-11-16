@@ -3,7 +3,7 @@ FROM node:6.1.0
 MAINTAINER astronomer <greg@astronomer.io>
 
 RUN apt-get update && \
-  apt-get install -y expect wget net-tools iproute ppp iptables && \
+  apt-get install -y expect wget net-tools iproute ppp iptables traceroute vim && \
   rm -rf /var/lib/apt/lists/*
 
 # Install fortivpn client unofficial .deb
