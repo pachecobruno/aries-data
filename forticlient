@@ -17,7 +17,7 @@ expect -exact "Would you like to connect to this server? (Y/N)" {
 
 # Expect tunnel to actually start
 expect {
-  "STATUS::Tunnel running" {
+  "STATUS::Connected" {
   } timeout {
     send_user -- "Failed to bring tunnel up after $env(VPNTIMEOUT)s\n"
     exit 1
