@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.logger = exports.createLogger = exports.singleS3StreamOutput = exports.singleS3StreamInput = exports.singleS3FileOutput = exports.singleS3FileInput = exports.Activity = exports.aws = undefined;
+exports.rootPackage = exports.logger = exports.createLogger = exports.singleS3StreamOutput = exports.singleS3StreamInput = exports.singleS3FileOutput = exports.singleS3FileInput = exports.Activity = exports.aws = undefined;
 
 var _Activity = require('./Activity');
 
@@ -65,6 +65,15 @@ Object.defineProperty(exports, 'logger', {
   enumerable: true,
   get: function get() {
     return _interopRequireDefault(_logger2).default;
+  }
+});
+
+var _rootPackage = require('./util/rootPackage');
+
+Object.defineProperty(exports, 'rootPackage', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_rootPackage).default;
   }
 });
 

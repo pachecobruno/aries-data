@@ -31,7 +31,7 @@ var _highland2 = _interopRequireDefault(_highland);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 var log = (0, _logger2.default)(__filename);
 
@@ -66,7 +66,7 @@ function applyTransforms(output, split) {
  * @returns {Object} Json to locate the output file.
  */
 function singleS3StreamOutput() {
-    var split = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+    var split = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
     // Return a decorator.
     return function (target, key, descriptor) {

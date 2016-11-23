@@ -1,5 +1,6 @@
 import test from 'blue-tape';
 import nock from 'nock';
+import Activity from '../lib/Activity';
 import execute, { parse } from '../lib/cli/execute';
 
 test('execute a good activity', t => async function() {

@@ -11,9 +11,13 @@ var _logger = require('./util/logger');
 
 var _logger2 = _interopRequireDefault(_logger);
 
+var _rootPackage = require('./util/rootPackage');
+
+var _rootPackage2 = _interopRequireDefault(_rootPackage);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -24,13 +28,13 @@ var Activity = function () {
     function Activity() {
         _classCallCheck(this, Activity);
 
-        var props = this.constructor.props;
+        var name = _rootPackage2.default.name;
 
-        if (!props.name) {
-            throw new Error('Activities require a name.');
+        if (!name) {
+            throw new Error('Activities require a name in package.json');
         }
 
-        this.log = (0, _logger2.default)('activity:' + props.name);
+        this.log = (0, _logger2.default)('activity:' + name);
     }
 
     _createClass(Activity, [{

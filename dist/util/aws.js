@@ -29,7 +29,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // });
 
 function createSWFClient() {
-    var raw = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+    var raw = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
     var client = new _awsSdk2.default.SWF({ region: process.env.AWS_REGION });
     if (raw) return client;
@@ -38,7 +38,7 @@ function createSWFClient() {
 };
 
 function createS3Client() {
-    var raw = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+    var raw = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
     var client = new _awsSdk2.default.S3({ region: process.env.AWS_REGION });
     if (raw) return client;
