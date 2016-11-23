@@ -34,9 +34,7 @@ var runTask = exports.runTask = function () {
 
 
                         // Get duration.
-                        _process$hrtime = process.hrtime(start);
-                        _process$hrtime2 = _slicedToArray(_process$hrtime, 1);
-                        seconds = _process$hrtime2[0];
+                        _process$hrtime = process.hrtime(start), _process$hrtime2 = _slicedToArray(_process$hrtime, 1), seconds = _process$hrtime2[0];
                         duration = _moment2.default.duration(seconds, 'seconds').humanize();
 
                         log.debug('Task executed in ' + duration + ' (' + seconds + ' sec).');
@@ -44,7 +42,7 @@ var runTask = exports.runTask = function () {
                         // Mimic legacy SWF behavior.
                         return _context2.abrupt('return', { input: output });
 
-                    case 11:
+                    case 9:
                     case 'end':
                         return _context2.stop();
                 }
@@ -70,7 +68,7 @@ var _logger2 = _interopRequireDefault(_logger);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 // Create logger.
 var log = (0, _logger2.default)(__filename);
@@ -81,8 +79,8 @@ var log = (0, _logger2.default)(__filename);
 
 exports.default = function () {
     var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(_ref2) {
-        var repo = _ref2.repo;
-        var args = _ref2._;
+        var repo = _ref2.repo,
+            args = _ref2._;
         var pkg, Module, handler, result;
         return regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
@@ -158,13 +156,13 @@ exports.default = function () {
  */
 function parse(args) {
     // Destructure.
-    var _args3 = _slicedToArray(args, 3);
-
-    var task = _args3[0];
-    var config = _args3[1];
-    var executionDate = _args3[2];
+    var _args3 = _slicedToArray(args, 3),
+        task = _args3[0],
+        config = _args3[1],
+        executionDate = _args3[2];
 
     // Return the parsed version.
+
 
     return [JSONparse(task), JSONparse(config), new Date(executionDate)];
 };
