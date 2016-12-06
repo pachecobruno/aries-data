@@ -4,7 +4,9 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "test": "babel-node test/test.js | faucet",
+    "test": "mocha --require babel-polyfill --compilers js:babel-register",
+    "test-watch": "mocha -w --require babel-polyfill --compilers js:babel-register",
+    "coverage": "babel-node ./node_modules/.bin/isparta cover _mocha",
     "clean": "rm -rf dist",
     "tail": "tail -f app.log | bunyan -o short",
     "build-src": "npm run clean && babel lib -d dist",
@@ -43,7 +45,9 @@
   },
   "devDependencies": {
     "babel-cli": "^6.6.5",
-    "blue-tape": "^0.2.0",
-    "faucet": "0.0.1"
+    "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "isparta": "^4.0.0",
+    "mocha": "^3.2.0"
   }
 }
