@@ -8,7 +8,6 @@ import execute, { parse } from '../lib/cli/execute';
 chai.use(chaiAsPromised);
 const assert = chai.assert;
 
-
 describe('execute', function() {
 
   describe('#execute', function() {
@@ -116,8 +115,8 @@ describe('execute', function() {
 
       nock(`https://${process.env.AWS_S3_TEMP_BUCKET}.s3.amazonaws.com`);
 
-        // Execute!
-        const result = await execute(params);
+      // Execute!
+      const result = await execute(params);
 
       // Make sure we have input and the result from the mock task.
       assert.equal(result.input, 'result');
