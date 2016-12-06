@@ -1,9 +1,12 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-chai.use(chaiAsPromised);
-const assert = chai.assert;
+import sinon from 'sinon';
 import nock from 'nock';
 import execute, { parse } from '../lib/cli/execute';
+import * as tunnel from '../lib/util/tunnel';
+
+chai.use(chaiAsPromised);
+const assert = chai.assert;
 
 describe('execute', function() {
 
@@ -41,6 +44,25 @@ describe('execute', function() {
 
       // Assert that the promise should fail.
       return assert.isRejected(execute(params));
+    });
+
+    it('calls openTunnel if vpnConnection exists on config.connection', async function() {
+      // String params, from airflow.
+      const task = '{}';
+      const config = JSON.stringify({connection:{vpnConnection:{}}});
+      const executionDate = '2016-08-17T19:30:00';
+
+      // Absolute path to mock activity.
+      const repo = `${process.cwd()}/test/goodActivity`;
+
+      // Construct param object.
+      const params = { repo, _: [task, config, executionDate] };
+
+      //stub openTunnel
+      const stub = sinon.stub(tunnel, 'openTunnel');
+      // Execute!
+      const result = await execute(params);
+      assert(stub.called, "openTunnel should be called if a connection has a vpnConnection property");
     });
   });
 
