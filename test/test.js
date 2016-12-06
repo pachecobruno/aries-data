@@ -91,7 +91,6 @@ describe('execute', function() {
 
       // Make sure we have input and the result from the mock task.
       assert.equal(result.input, 'result');
-
     });
   });
 });
