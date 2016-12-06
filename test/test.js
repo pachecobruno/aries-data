@@ -2,11 +2,12 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import sinon from 'sinon';
 import nock from 'nock';
-import execute, { parse } from '../lib/cli/execute';
 import * as tunnel from '../lib/util/tunnel';
+import execute, { parse } from '../lib/cli/execute';
 
 chai.use(chaiAsPromised);
 const assert = chai.assert;
+
 
 describe('execute', function() {
 
@@ -49,20 +50,27 @@ describe('execute', function() {
     it('calls openTunnel if vpnConnection exists on config.connection', async function() {
       // String params, from airflow.
       const task = '{}';
-      const config = JSON.stringify({connection:{vpnConnection:{}}});
+      const config = {
+        connection: {
+          vpnConnection:{
+            type: 'forticlientsslvpn'
+          }
+        }
+      };
       const executionDate = '2016-08-17T19:30:00';
 
       // Absolute path to mock activity.
       const repo = `${process.cwd()}/test/goodActivity`;
 
       // Construct param object.
-      const params = { repo, _: [task, config, executionDate] };
+      const params = { repo, _: [task, JSON.stringify(config), executionDate] };
 
       //stub openTunnel
-      const stub = sinon.stub(tunnel, 'openTunnel');
+      const stub = sinon.stub(tunnel, 'createTunnel', () => {});
+
       // Execute!
       const result = await execute(params);
-      assert(stub.called, "openTunnel should be called if a connection has a vpnConnection property");
+      assert(stub.calledOnce, "createTunnel should be called if a connection has a vpnConnection param");
     });
   });
 
@@ -108,8 +116,8 @@ describe('execute', function() {
 
       nock(`https://${process.env.AWS_S3_TEMP_BUCKET}.s3.amazonaws.com`);
 
-      // Execute!
-      const result = await execute(params);
+        // Execute!
+        const result = await execute(params);
 
       // Make sure we have input and the result from the mock task.
       assert.equal(result.input, 'result');
