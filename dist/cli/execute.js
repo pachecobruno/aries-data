@@ -66,13 +66,14 @@ var _logger = require('../util/logger');
 
 var _logger2 = _interopRequireDefault(_logger);
 
+var _tunnel = require('../util/tunnel');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 // Create logger.
 var log = (0, _logger2.default)(__filename);
-
 /**
  * Execute an aries module.
  */
@@ -81,7 +82,9 @@ exports.default = function () {
     var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(_ref2) {
         var repo = _ref2.repo,
             args = _ref2._;
-        var pkg, Module, handler, result;
+
+        var pkg, Module, handler, parsedArgs, _parsedArgs, task, config, result;
+
         return regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
                 switch (_context.prev = _context.next) {
@@ -101,13 +104,22 @@ exports.default = function () {
 
                         // Instantiate a new task handler.
                         handler = new Module();
+                        parsedArgs = parse(args);
+                        _parsedArgs = _slicedToArray(parsedArgs, 2), task = _parsedArgs[0], config = _parsedArgs[1];
 
-                        // Run the handler and get the output.
+                        if (!(config.connection || {}).vpnConnection) {
+                            _context.next = 10;
+                            break;
+                        }
 
-                        _context.next = 7;
-                        return runTask(handler, parse(args));
+                        _context.next = 10;
+                        return (0, _tunnel.createTunnel)(config.connection.vpnConnection);
 
-                    case 7:
+                    case 10:
+                        _context.next = 12;
+                        return runTask(handler, parsedArgs);
+
+                    case 12:
                         result = _context.sent;
 
 
@@ -117,8 +129,8 @@ exports.default = function () {
                         // Return the result.
                         return _context.abrupt('return', result);
 
-                    case 12:
-                        _context.prev = 12;
+                    case 17:
+                        _context.prev = 17;
                         _context.t0 = _context['catch'](0);
 
                         // Log the error.
@@ -127,19 +139,19 @@ exports.default = function () {
                         // Rethrow the error.
                         throw _context.t0;
 
-                    case 16:
-                        _context.prev = 16;
+                    case 21:
+                        _context.prev = 21;
 
                         // Log out final message.
                         log.debug('Finished executing task.');
-                        return _context.finish(16);
+                        return _context.finish(21);
 
-                    case 19:
+                    case 24:
                     case 'end':
                         return _context.stop();
                 }
             }
-        }, _callee, this, [[0, 12, 16, 19]]);
+        }, _callee, this, [[0, 17, 21, 24]]);
     }));
 
     function execute(_x) {
