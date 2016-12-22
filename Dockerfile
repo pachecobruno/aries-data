@@ -4,6 +4,7 @@ MAINTAINER astronomer <greg@astronomer.io>
 
 # Add standard files on downstream builds.
 ONBUILD ADD lib /usr/local/src/lib
+ONBUILD ADD test /usr/local/src/test
 ONBUILD ADD package.json /usr/local/src/
 ONBUILD ADD .babelrc /usr/local/src/
 
