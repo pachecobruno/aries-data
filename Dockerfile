@@ -7,6 +7,7 @@ ONBUILD ADD lib /usr/local/src/lib
 ONBUILD ADD test /usr/local/src/test
 ONBUILD ADD package.json /usr/local/src/
 ONBUILD ADD .babelrc /usr/local/src/
+ONBUILD ADD .eslintrc /usr/local/src/
 
 # Switch to src dir and install node modules.
 ONBUILD WORKDIR /usr/local/src
