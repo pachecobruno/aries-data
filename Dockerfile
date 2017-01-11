@@ -9,6 +9,9 @@ ONBUILD ADD package.json /usr/local/src/
 ONBUILD ADD .babelrc /usr/local/src/
 ONBUILD ADD .eslintrc /usr/local/src/
 
+# Make directory for bunyan logs
+RUN mkdir -p /usr/local/src/log
+
 # Switch to src dir and install node modules.
 ONBUILD WORKDIR /usr/local/src
 ONBUILD RUN ["npm", "install"]
