@@ -11,6 +11,7 @@ ONBUILD ADD .eslintrc /usr/local/src/
 
 # Make directory for bunyan logs
 RUN mkdir -p /usr/local/src/log
+ENV LOG_PATH /usr/local/src/log
 
 # Switch to src dir and install node modules.
 ONBUILD WORKDIR /usr/local/src

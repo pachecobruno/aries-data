@@ -46,7 +46,7 @@ var Logger = function () {
                 stream: (0, _bunyanFormat2.default)({ outputMode: 'simple', color: false })
             };
 
-            var path = process.env.MESOS_TASK_ID ? './log/' + process.env.MESOS_TASK_ID + '.log' : './app.log';
+            var path = process.env.LOG_PATH ? path.join(process.env.LOG_PATH, 'app.log') : './app.log';
 
             var file = {
                 level: level,
