@@ -46,11 +46,11 @@ var Logger = function () {
                 stream: (0, _bunyanFormat2.default)({ outputMode: 'simple', color: false })
             };
 
-            // XXX: We can remove this once we full transition to airflow.
-            // Only required for cloudwatch logs.
+            var path = process.env.LOG_PATH ? path.join(process.env.LOG_PATH, 'app.log') : './app.log';
+
             var file = {
                 level: level,
-                path: process.env.LOG_FILE || './app.log'
+                path: path
             };
 
             // Return array with our default stream.
