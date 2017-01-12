@@ -46,11 +46,11 @@ var Logger = function () {
                 stream: (0, _bunyanFormat2.default)({ outputMode: 'simple', color: false })
             };
 
-            var path = process.env.LOG_PATH ? path.join(process.env.LOG_PATH, 'app.log') : './app.log';
+            var logPath = process.env.LOG_PATH ? _path2.default.join(process.env.LOG_PATH, 'app.log') : './app.log';
 
             var file = {
                 level: level,
-                path: path
+                path: logPath
             };
 
             // Return array with our default stream.
