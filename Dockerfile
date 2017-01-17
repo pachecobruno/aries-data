@@ -3,8 +3,8 @@ FROM node:6.1.0
 MAINTAINER astronomer <greg@astronomer.io>
 
 # Make directory for bunyan logs
-RUN mkdir -p /usr/local/src/log
-ENV LOG_PATH /usr/local/src/log
+ONBUILD RUN mkdir -p /usr/local/src/log
+ONBUILD ENV LOG_PATH /usr/local/src/log
 
 ONBUILD WORKDIR /usr/local/src
 
