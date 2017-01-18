@@ -1,9 +1,12 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
+import sinon from 'sinon';
+import nock from 'nock';
+import * as tunnel from '../lib/util/tunnel';
+import execute, { parse } from '../lib/cli/execute';
+
 chai.use(chaiAsPromised);
 const assert = chai.assert;
-import nock from 'nock';
-import execute, { parse } from '../lib/cli/execute';
 
 describe('execute', function() {
 
@@ -41,6 +44,32 @@ describe('execute', function() {
 
       // Assert that the promise should fail.
       return assert.isRejected(execute(params));
+    });
+
+    it('calls openTunnel if vpnConnection exists on config.connection', async function() {
+      // String params, from airflow.
+      const task = '{}';
+      const config = {
+        connection: {
+          vpnConnection:{
+            type: 'forticlientsslvpn'
+          }
+        }
+      };
+      const executionDate = '2016-08-17T19:30:00';
+
+      // Absolute path to mock activity.
+      const repo = `${process.cwd()}/test/goodActivity`;
+
+      // Construct param object.
+      const params = { repo, _: [task, JSON.stringify(config), executionDate] };
+
+      //stub openTunnel
+      const stub = sinon.stub(tunnel, 'createTunnel', () => {});
+
+      // Execute!
+      const result = await execute(params);
+      assert(stub.calledOnce, "createTunnel should be called if a connection has a vpnConnection param");
     });
   });
 

@@ -130,15 +130,20 @@ function singleS3StreamOutput() {
                                     return new Promise(function (resolve, reject) {
                                         // Get a new s3 client.
                                         var s3 = (0, _aws.createS3Client)();
+                                        var streamError = null;
 
                                         // Start upload.
                                         var managedUpload = s3.upload(s3Params, s3Options, function (err, data) {
+                                            if (streamError) return reject(streamError);
                                             if (err) return reject(err);
                                             resolve(data);
                                         });
 
                                         // Watch for input errors, and abort if we have one.
-                                        readStream.on('error', managedUpload.abort.bind(managedUpload));
+                                        readStream.on('error', function (err) {
+                                            streamError = err;
+                                            managedUpload.abort();
+                                        });
                                     });
 
                                 case 12:
