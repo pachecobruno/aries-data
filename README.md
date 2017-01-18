@@ -2,31 +2,30 @@
 
 # Aries
 
-Aries is a library and CLI that makes it easy to create and run multi-stage workflows written in JavaScript (ES2015/2016), preferably in a distributed cloud environment.  Aries currently supports [Amazon Simple Workflow (SWF)](https://aws.amazon.com/swf/details/) but can evolve to support other services, or some future custom implementation.
+Aries is a library and CLI that makes it easy to create and run multi-stage workflows written in JavaScript (ES2015/2016), preferably in a distributed cloud environment.
 
 ## Terminology
-- Decider - The decider is a module that receives workflow events from SWF, and makes decisions on what to do next.  This can include things like completing or failing the workflow, setting timers, rescheduling the workflow to run again, and scheduling activities to be executed.
 
 - Activity - Activities are modules that implement a specific task, that will typically make up a larger workflow.  Activities should be small and precise, although they can be long-running.
 
 ## Creating an Activity
-We've created a [boilerplate project](https://github.com/aries-data/aries-activity-boilerplate) with all the necessities. To get started, look through a few examples at the [aries-activity Github organization](https://github.com/aries-data). 
+We've created a [yeoman generator](https://github.com/aries-data/generator-aries-activity) with all the necessities. To get started, look through a few examples at the [aries-activity Github organization](https://github.com/aries-data).
 
-The default export of your module should be your new activity, which extends the `Activity` class that is provided by Aries.  There are two things required for every activity: the configuration (name and version), and the `onTask` function.  The name and version are used under the hood by [Amazon SWF](https://aws.amazon.com/swf/details/) when we need to deprecate old activity versions and start using new versions.  The current best practice is to `require` the values provided in `package.json` to keep them consistent.
+The default export of your module should be your new activity, which extends the `Activity` class that is provided by Aries.  The only thing required of the `Activity` subclass is an implementation of the `onTask` function.
 
-The `onTask` function is called with two parameters: `activityTask` and `config` by default.  In the Astronomer cloud, a third parameter, `lastExecuted`, is also provided.
+The `onTask` function is called with two parameters: `activityTask` and `config` by default.  In the Astronomer cloud, a third parameter, `executionDate`, is also provided.
 
-`activityTask` is the raw data provided by SWF.  When [polling for activity tasks](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/SWF.html#pollForActivityTask-property),
+`activityTask` is the raw data provided by the execution environment. The Aries-CLI parses command line arguments and provides this to `onTask`.
 `config` is an arbitrary configuration object for a particular execution of this task.  Activity tasks should be as generic as possible, but configurable using this parameter.  In the astronomer cloud, this object will be created and updated by users in the UI.  In development, this should be a mocked object passed in by your test.
-`lastExecuted` is the date this particular activity was executed as a part of the currently running workflow.
+`executionDate` is the date this particular activity was executed as a part of the currently running workflow.
 
 ##### `onTask` implementation
 Workflows should be broken out into small, precise, managable pieces.  A typical workflow might have two steps:
 
 1.  Extract, or query for some data that exists in a database, or API.
-2.  Transform the output into a format that the destination can work with. 
+2.  Transform the output into a format that the destination can work with.
 
-Currently, `onTask` should only return a string, which will be loaded to Amazon Simple Storage Service (S3) as a file, and that file will be passed into other activites.
+The return value of `onTask` can be of any type supported by Highland.js. Under the hood, Aries wraps the return value in a highland stream. Streams, promises, or iterables are possible return values;
 
 ##### Decorators
 We provide the following decorators that can be used in any activity:
@@ -74,29 +73,13 @@ export default class JsonToCsv extends Activity {
 ```
 
 ##### Logging
-When testing an activity, `console.log` doesn't work well due to the output getting piped into a TAP reporter, like faucet, which can make debugging difficult. To solve this, Aries uses bunyan to handle logging. All activities have access to a logger instance by default, which can be used like this: `this.log.debug('debug info here')`. When testing your activity, logs are written to `app.log`, which can be viewed in a pretty format with `tail -f app.log | bunyan -o short`. If you just want the raw logs, `tail -f app.log` will print the logs in their JSON format.
+Aries uses bunyan to handle logging. All activities have access to a logger instance by default, which can be used like this: `this.log.debug('debug info here')`. When testing your activity, logs are written to `app.log`, which can be viewed in a pretty format with `tail -f app.log | bunyan -o short`. If you just want the raw logs, `tail -f app.log` will print the logs in their JSON format.
+
+It is possible to override the output directory of `app.log` by setting `process.env.LOG_PATH` to a directory. The directory must already exist.
 
 ##### Testing
-For consistency, all Aries activities implement [tape](https://github.com/substack/tape) for testing.  You should split the functionality and logic of your integration into separate functions on your activity.  These functions should be pure and operate on nothing but its input values, then return some result that can be tested.  Ideally, your `onTask` function should just be the glue between the other testable functions of your activity.
+For consistency, all Aries activities implement [mocha](https://github.com/mochajs/mocha) for testing.  You should split the functionality and logic of your integration into separate functions on your activity.  These functions should be pure and operate on nothing but its input values, then return some result that can be tested.  Ideally, your `onTask` function should just be the glue between the other testable functions of your activity.
 - `npm run test`
-
-##### ActivityTester module
-The `ActivityTester` module can be imported from `aries-data` into your tests to run full blown tests by using mock input/output files and executing the onTask function. Here is a testing example from our activity called [aries-activity-json-flatten](https://github.com/aries-data/aries-activity-json-flatten):
-```javascript
-import JsonFlatten from '..';
-test('flattens a stream', t => async function() {
-    const tester = new ActivityTester(JsonFlatten); // pass in your activity to the constructor
-
-    tester.interceptS3StreamInput('./test/input'); // file to log input
-    tester.testS3StreamOutput('./test/output', t.equal); // file to log output
-
-    const task = { input: { key: '123' } }; // specify `activityTask` to use when testing
-    const config = { some: 'thing' }; // specify `config` to use when testing
-
-    const result = await tester.onTask(task, config); // run the task
-    t.ok(result);
-}());
-```
 
 ##### Putting it all together
 Typically, adding a new "integration" may only involve writing a single activity that will be chained to already existing activities to produce the desired workflow.  For example, if you need to get Salesforece API data to Amazon Redshift, you should only need to write the `aries-activity-salesforce-source` activity.  When running as a workflow, your new `aries-activity-salesforce-source` could read data from Salesforce and write the JSON response objects to an S3 object.  The next activity, `aries-activity-json-to-csv` could transform the data from JSON objects to CSV, and load the result to a new S3 object.  Finally, `aries-activity-redshift-sink` could use the CSV output and efficiently load the data using the `COPY` command.
