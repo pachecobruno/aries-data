@@ -29,6 +29,7 @@ The return value of `onTask` can be of any type supported by Highland.js. Under 
 
 ##### Decorators
 We provide the following decorators that can be used in any activity:
+
 1. `singleS3FileInput` - Converts activityTask.input from an Amazon S3 Key to the contents of a file.
     * Arguments: `removeAfter`: if set to true, the file will be removed after
 3. `singleS3StreamInput` - Converts input to a [stream](http://www.streamjs.org)
