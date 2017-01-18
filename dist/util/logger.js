@@ -18,6 +18,10 @@ var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
 
+var _uuid = require('uuid');
+
+var _uuid2 = _interopRequireDefault(_uuid);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -46,11 +50,11 @@ var Logger = function () {
                 stream: (0, _bunyanFormat2.default)({ outputMode: 'simple', color: false })
             };
 
-            // XXX: We can remove this once we full transition to airflow.
-            // Only required for cloudwatch logs.
+            var logPath = process.env.LOG_PATH ? _path2.default.join(process.env.LOG_PATH, _uuid2.default.v4() + '.log') : './app.log';
+
             var file = {
                 level: level,
-                path: process.env.LOG_FILE || './app.log'
+                path: logPath
             };
 
             // Return array with our default stream.
