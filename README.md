@@ -1,4 +1,4 @@
-![Aries logo](https://avatars1.githubusercontent.com/u/17130436?v=3&s=200)
+![alt text](/img/logo.png "Guide to the Aries Javascript Library")
 
 # Aries
 
