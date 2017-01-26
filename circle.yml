@@ -1,4 +1,6 @@
 machine:
+  node:
+      version: 6.1.0
   environment:
     IMAGE_NAME: astronomerio/aries-data
   services:
@@ -8,15 +10,15 @@ dependencies:
   override:
     - docker info
     - docker build --rm=false -t $IMAGE_NAME .
+    - npm install --dev
 
 test:
   override: 
-    - docker run --entrypoint npm $IMAGE_NAME run lint
-    - docker run --entrypoint npm $IMAGE_NAME run coverage
+    - npm run lint
+    - npm run coverage
   post:
     - mkdir $CIRCLE_ARTIFACTS/coverage
-    # get the name of the container and copy the coverage directory into $CIRCLE_ARTIFACTS
-    - docker cp $(docker ps -l --format "{{.Names}}"):/usr/local/src/coverage $CIRCLE_ARTIFACTS
+    - mv ./coverage $CIRCLE_ARTIFACTS
 
 deployment:
   # git tags get deployed to docker hub with the latest tag
