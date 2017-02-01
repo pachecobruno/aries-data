@@ -57,7 +57,7 @@ var Logger = function () {
             var logPath = process.env.LOG_PATH ? _path2.default.join(process.env.LOG_PATH, _uuid2.default.v4() + '.log') : './app.log';
 
             var file = {
-                level: level,
+                level: 'info',
                 path: logPath
             };
 
