@@ -9,8 +9,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 exports.applyTransforms = applyTransforms;
 exports.default = singleS3StreamInput;
 
-var _aws = require('../util/aws');
-
 var _s3DownloadStream = require('s3-download-stream');
 
 var _s3DownloadStream2 = _interopRequireDefault(_s3DownloadStream);
@@ -18,6 +16,12 @@ var _s3DownloadStream2 = _interopRequireDefault(_s3DownloadStream);
 var _highland = require('highland');
 
 var _highland2 = _interopRequireDefault(_highland);
+
+var _aws = require('../util/aws');
+
+var _nodeStreamMeter = require('node-stream-meter');
+
+var _nodeStreamMeter2 = _interopRequireDefault(_nodeStreamMeter);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -32,11 +36,6 @@ function applyTransforms(source, split) {
     // Wrap with highland.
     var readStream = (0, _highland2.default)(source);
 
-    // No transformations.
-    if (!split) {
-        return readStream;
-    }
-
     // Split on new lines.
     if (split === true) {
         return readStream.split();
@@ -45,9 +44,13 @@ function applyTransforms(source, split) {
     // Split on new lines, then parse individual lines into objects.
     // Ignore errors - typically caused by trailing new lines in input.
     if (split === 'json') {
+        // eslint-disable-next-line no-unused-vars
         return readStream.split().map(JSON.parse).errors(function (err) {});
     }
-};
+
+    // No transformations.
+    return readStream;
+}
 
 /**
  * Single S3 Stream Input
@@ -73,8 +76,7 @@ function singleS3StreamInput() {
                 }
 
                 return _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-                    var s3Params, client, head, readStream, stream, input, newActivityTask, newArgs, result, _client;
-
+                    var s3Params, client, head, readStream, stream, streamCounter, input, newActivityTask, newArgs, result;
                     return regeneratorRuntime.wrap(function _callee$(_context) {
                         while (1) {
                             switch (_context.prev = _context.next) {
@@ -126,9 +128,19 @@ function singleS3StreamInput() {
 
                                     stream = applyTransforms(readStream, split);
 
-                                    // Merge parsed input object with a file stream.
+                                    // get meter stream to count bytes in stream
 
-                                    input = _extends({}, activityTask.input, { file: stream });
+                                    streamCounter = (0, _nodeStreamMeter2.default)();
+
+                                    // handle the 'end' event emitted by meter stream so we can log out the bytes
+                                    // TODO: associate bytes with an appId
+
+                                    streamCounter.on('end', function () {
+                                        _this.log.info({ totalBytesIn: streamCounter.bytes });
+                                    });
+
+                                    // Merge parsed input object with a file stream.
+                                    input = _extends({}, activityTask.input, { file: stream.pipe(streamCounter) });
 
                                     // Create new activityTask replacing the original input with the file.
                                     // const newActivityTask = activityTask.assign({ input });
@@ -141,28 +153,27 @@ function singleS3StreamInput() {
 
                                     // Return the result.
 
-                                    _context.next = 16;
+                                    _context.next = 18;
                                     return callback.apply(_this, newArgs);
 
-                                case 16:
+                                case 18:
                                     result = _context.sent;
 
                                     if (!process.env.ARIES_REMOVE_FILES_AFTER_TASK) {
-                                        _context.next = 22;
+                                        _context.next = 23;
                                         break;
                                     }
 
-                                    _client = (0, _aws.createS3Client)();
-                                    _context.next = 21;
-                                    return _client.deleteObject(s3Params);
-
-                                case 21:
-                                    _this.log.info('Deleted ' + s3Params.Key);
+                                    _context.next = 22;
+                                    return client.deleteObject(s3Params);
 
                                 case 22:
-                                    return _context.abrupt('return', result);
+                                    _this.log.info('Deleted ' + s3Params.Key);
 
                                 case 23:
+                                    return _context.abrupt('return', result);
+
+                                case 24:
                                 case 'end':
                                     return _context.stop();
                             }
@@ -172,4 +183,4 @@ function singleS3StreamInput() {
             }
         });
     };
-};
+}

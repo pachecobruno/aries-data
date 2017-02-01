@@ -113,4 +113,4 @@ function singleS3FileInput() {
             }
         });
     };
-};
+}

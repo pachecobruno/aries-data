@@ -37,6 +37,9 @@ var Activity = function () {
         this.log = (0, _logger2.default)('activity:' + name);
     }
 
+    // eslint-disable-next-line no-unused-vars, class-methods-use-this
+
+
     _createClass(Activity, [{
         key: 'onTask',
         value: function () {
@@ -67,4 +70,3 @@ var Activity = function () {
 }();
 
 exports.default = Activity;
-;
