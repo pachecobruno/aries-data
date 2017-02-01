@@ -76,7 +76,7 @@ function singleS3StreamInput() {
                 }
 
                 return _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-                    var s3Params, client, head, readStream, stream, streamCounter, input, newActivityTask, newArgs, result;
+                    var s3Params, client, head, readStream, streamCounter, stream, input, newActivityTask, newArgs, result;
                     return regeneratorRuntime.wrap(function _callee$(_context) {
                         while (1) {
                             switch (_context.prev = _context.next) {
@@ -124,10 +124,6 @@ function singleS3StreamInput() {
                                         params: s3Params
                                     });
 
-                                    // Split chunks by newlines if required.
-
-                                    stream = applyTransforms(readStream, split);
-
                                     // get meter stream to count bytes in stream
 
                                     streamCounter = (0, _streamMeter2.default)();
@@ -139,8 +135,12 @@ function singleS3StreamInput() {
                                         _this.log.info({ totalBytesIn: streamCounter.bytes });
                                     });
 
+                                    // Split chunks by newlines if required.
+                                    stream = applyTransforms(readStream.pipe(streamCounter), split);
+
                                     // Merge parsed input object with a file stream.
-                                    input = _extends({}, activityTask.input, { file: stream.pipe(streamCounter) });
+
+                                    input = _extends({}, activityTask.input, { file: stream });
 
                                     // Create new activityTask replacing the original input with the file.
                                     // const newActivityTask = activityTask.assign({ input });

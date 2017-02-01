@@ -77,7 +77,7 @@ function singleS3StreamOutput() {
                 }
 
                 return _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-                    var output, source, readStream, streamCounter, s3Params, s3Options, result;
+                    var output, source, streamCounter, readStream, s3Params, s3Options, result;
                     return regeneratorRuntime.wrap(function _callee$(_context) {
                         while (1) {
                             switch (_context.prev = _context.next) {
@@ -100,10 +100,6 @@ function singleS3StreamOutput() {
                                     // Create new string object if output is string literal.
                                     source = (0, _lodash2.default)(output) ? String(output) : output;
 
-                                    // Plug in our transformers if needed.
-
-                                    readStream = applyTransforms(source, split);
-
                                     // get meter stream to count bytes in stream
 
                                     streamCounter = (0, _streamMeter2.default)();
@@ -115,11 +111,15 @@ function singleS3StreamOutput() {
                                         _this.log.info({ totalBytesOut: streamCounter.bytes });
                                     });
 
+                                    // Plug in our transformers if needed.
+                                    readStream = applyTransforms(source.pipe(streamCounter), split);
+
                                     // Location of s3 file.
+
                                     s3Params = {
                                         Bucket: process.env.AWS_S3_TEMP_BUCKET,
                                         Key: _uuid2.default.v4(),
-                                        Body: readStream.pipe(streamCounter).pipe(new _stream.PassThrough())
+                                        Body: readStream.pipe(new _stream.PassThrough())
                                     };
                                     s3Options = {
                                         partSize: 5 * 1024 * 1024,
