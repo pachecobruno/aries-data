@@ -17,11 +17,11 @@ var _highland = require('highland');
 
 var _highland2 = _interopRequireDefault(_highland);
 
+var _streamMeter = require('stream-meter');
+
+var _streamMeter2 = _interopRequireDefault(_streamMeter);
+
 var _aws = require('../util/aws');
-
-var _nodeStreamMeter = require('node-stream-meter');
-
-var _nodeStreamMeter2 = _interopRequireDefault(_nodeStreamMeter);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -130,7 +130,7 @@ function singleS3StreamInput() {
 
                                     // get meter stream to count bytes in stream
 
-                                    streamCounter = (0, _nodeStreamMeter2.default)();
+                                    streamCounter = (0, _streamMeter2.default)();
 
                                     // handle the 'end' event emitted by meter stream so we can log out the bytes
                                     // TODO: associate bytes with an appId
