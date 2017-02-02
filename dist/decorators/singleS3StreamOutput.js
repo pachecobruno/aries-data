@@ -112,14 +112,14 @@ function singleS3StreamOutput() {
                                     });
 
                                     // Plug in our transformers if needed.
-                                    readStream = applyTransforms(source.pipe(streamCounter), split);
+                                    readStream = applyTransforms(source, split);
 
                                     // Location of s3 file.
 
                                     s3Params = {
                                         Bucket: process.env.AWS_S3_TEMP_BUCKET,
                                         Key: _uuid2.default.v4(),
-                                        Body: readStream.pipe(new _stream.PassThrough())
+                                        Body: readStream.pipe(streamCounter).pipe(new _stream.PassThrough())
                                     };
                                     s3Options = {
                                         partSize: 5 * 1024 * 1024,
