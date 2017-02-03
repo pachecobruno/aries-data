@@ -98,7 +98,7 @@ function singleS3FileInput() {
                                     return client.deleteObject(params);
 
                                 case 16:
-                                    _this.log.info('Deleted ' + params.Key);
+                                    _this.log.debug('Deleted ' + params.Key);
 
                                 case 17:
                                     return _context.abrupt('return', result);

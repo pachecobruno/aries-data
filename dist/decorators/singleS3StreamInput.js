@@ -168,7 +168,7 @@ function singleS3StreamInput() {
                                     return client.deleteObject(s3Params);
 
                                 case 22:
-                                    _this.log.info('Deleted ' + s3Params.Key);
+                                    _this.log.debug('Deleted ' + s3Params.Key);
 
                                 case 23:
                                     return _context.abrupt('return', result);

@@ -90,10 +90,10 @@ function createFortinetTunnel(options) {
                         (function () {
                             var interval = setInterval(function () {
                                 _dns2.default.lookup(knownHost, function (err, address) {
-                                    log.info('attempting to resolve DNS for host: ' + knownHost);
+                                    log.debug('attempting to resolve DNS for host: ' + knownHost);
                                     if (!err && address) {
                                         // cleanup and resolve
-                                        log.info('resolved DNS for ' + knownHost);
+                                        log.debug('resolved DNS for ' + knownHost);
                                         cleanup(); // eslint-disable-line no-use-before-define
                                         resolve(true);
                                     }
@@ -107,7 +107,7 @@ function createFortinetTunnel(options) {
                             var cleanup = function cleanup() {
                                 clearInterval(interval);
                                 clearTimeout(timeout);
-                                log.info('cleaned up interval and timer');
+                                log.debug('cleaned up interval and timer');
                             };
                         })();
                     } else {
