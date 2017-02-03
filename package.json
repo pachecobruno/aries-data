@@ -41,7 +41,7 @@
     "nock": "^8.0.0",
     "promise-queue": "^2.2.2",
     "s3-download-stream": "0.0.5",
-    "stream-meter": "github:datarouterai/node-stream-meter",
+    "stream-meter": "github:datarouterai/node-stream-meter#1.0.5",
     "thenify-all": "^1.6.0",
     "uuid": "^2.0.1",
     "validator": "^5.2.0"
