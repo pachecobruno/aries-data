@@ -133,6 +133,7 @@ function singleS3StreamInput() {
 
                                     streamCounter.on('end', function () {
                                         _this.log.info({ totalBytesIn: streamCounter.bytes });
+                                        _this.log.info({ totalRecordsIn: streamCounter.recordCount });
                                     });
 
                                     // Split chunks by newlines if required.

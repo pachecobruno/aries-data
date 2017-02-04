@@ -109,6 +109,7 @@ function singleS3StreamOutput() {
 
                                     streamCounter.on('finish', function () {
                                         _this.log.info({ totalBytesOut: streamCounter.bytes });
+                                        _this.log.info({ totalRecordsOut: streamCounter.recordCount });
                                     });
 
                                     // Plug in our transformers if needed.
