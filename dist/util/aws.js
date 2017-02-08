@@ -6,10 +6,6 @@ Object.defineProperty(exports, "__esModule", {
 exports.createSWFClient = createSWFClient;
 exports.createS3Client = createS3Client;
 
-var _https = require('https');
-
-var _https2 = _interopRequireDefault(_https);
-
 var _awsSdk = require('aws-sdk');
 
 var _awsSdk2 = _interopRequireDefault(_awsSdk);
@@ -20,14 +16,6 @@ var _thenifyAll2 = _interopRequireDefault(_thenifyAll);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// AWS.config.update({
-//     httpOptions: {
-//         agent: new https.Agent({
-//             maxSockets: 1024,
-//         }),
-//     },
-// });
-
 function createSWFClient() {
     var raw = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
@@ -35,7 +23,7 @@ function createSWFClient() {
     if (raw) return client;
 
     return (0, _thenifyAll2.default)(client, client, ['startWorkflowExecution', 'pollForDecisionTask', 'pollForActivityTask', 'respondDecisionTaskCompleted', 'respondActivityTaskCanceled', 'respondActivityTaskCompleted', 'respondActivityTaskFailed', 'listActivityTypes', 'registerActivityType', 'terminateWorkflowExecution']);
-};
+}
 
 function createS3Client() {
     var raw = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
@@ -46,4 +34,4 @@ function createS3Client() {
     return (0, _thenifyAll2.default)(client, client, ['completeMultipartUpload', 'createMultipartUpload', 'deleteObject', 'getObject', 'headObject', 'putObject', 'listObjects', 'listObjectsV2',
     // 'upload',
     'uploadPartCopy']);
-};
+}

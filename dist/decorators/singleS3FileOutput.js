@@ -19,7 +19,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 function singleS3FileOutput() {
-
     // Acting as a factory, return the decorator function.
     return function (target, key, descriptor) {
         // Copy of the original function.
@@ -68,6 +67,7 @@ function singleS3FileOutput() {
                                     // Upload the file.
 
                                     _this.log.debug('Uploading ' + s3Params.Key + ' to s3.');
+                                    // eslint-disable-next-line no-unused-vars
                                     _context.next = 9;
                                     return client.upload(s3Params);
 
@@ -89,4 +89,4 @@ function singleS3FileOutput() {
             }
         });
     };
-};
+}

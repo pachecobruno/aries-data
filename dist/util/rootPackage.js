@@ -15,4 +15,5 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * Use to retrieve metadata about the activity
  * @return {Object} an object representing the activity's package.json
  */
+// eslint-disable-next-line global-require, import/no-dynamic-require
 exports.default = require(_appRootPath2.default + '/package.json');

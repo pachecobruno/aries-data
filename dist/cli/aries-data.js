@@ -3,7 +3,7 @@
 
 // Babel up.  Compile all packages prefixed with aries-.
 require('babel-core/register')({
-    'ignore': /node_modules\/(?!aries-)/
+    ignore: /node_modules\/(?!aries-)/
 });
 require('babel-polyfill');
 
@@ -20,7 +20,9 @@ var argv = require('minimist')(process.argv.slice(2), {
 require('./execute').default(argv).then(function (output) {
     console.log(JSON.stringify(output));
     setTimeout(process.exit.bind(process, 0), 1000);
-}).catch(function (error) {
+})
+// eslint-disable-next-line no-unused-vars
+.catch(function (err) {
     console.log(JSON.stringify({}));
     setTimeout(process.exit.bind(process, 1), 1000);
 });

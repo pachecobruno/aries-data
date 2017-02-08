@@ -33,11 +33,15 @@ var Logger = function () {
         _classCallCheck(this, Logger);
 
         this.log = _bunyan2.default.createLogger({
+            // eslint-disable-next-line global-require
             name: require('../../package.json').name,
             serializers: { err: _bunyan2.default.stdSerializers.err },
             streams: streams || this.getDefaultStreams()
         });
     }
+
+    // eslint-disable-next-line class-methods-use-this
+
 
     _createClass(Logger, [{
         key: 'getDefaultStreams',
@@ -53,7 +57,7 @@ var Logger = function () {
             var logPath = process.env.LOG_PATH ? _path2.default.join(process.env.LOG_PATH, _uuid2.default.v4() + '.log') : './app.log';
 
             var file = {
-                level: level,
+                level: 'info',
                 path: logPath
             };
 
