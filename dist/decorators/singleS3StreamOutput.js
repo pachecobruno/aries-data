@@ -98,7 +98,10 @@ function singleS3StreamOutput() {
                                 case 5:
 
                                     // Create new string object if output is string literal.
-                                    source = (0, _lodash2.default)(output) ? String(output) : output;
+                                    // highland does not accept a single string literal argument.
+                                    // Must be a String object.
+                                    // eslint-disable-next-line no-new-wrappers
+                                    source = (0, _lodash2.default)(output) ? new String(output) : output;
 
                                     // get meter stream to count bytes in stream
 
