@@ -21,17 +21,18 @@ test:
     - mv ./coverage $CIRCLE_ARTIFACTS
 
 deployment:
-  # git tags get deployed to docker hub with the latest tag
+  # deploy git tags to docker hub with docker tag = git tag
   production:
     tag: /[0-9]+(\.[0-9]+)*/
     owner: aries-data
     commands:
+      - docker tag $IMAGE_NAME:latest $IMAGE_NAME:$CIRCLE_TAG
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker push $IMAGE_NAME
-  # changes to the master branch are deployed and tagged master
+      - docker push $IMAGE_NAME:$CIRCLE_TAG
+  # deploy branches to docker hub with tag equal to branch name
   staging:
-    branch: master
+    branch: /*/
     commands:
-      - docker tag $IMAGE_NAME:latest $IMAGE_NAME:master
+      - docker tag $IMAGE_NAME:latest $IMAGE_NAME:$CIRCLE_BRANCH
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker push $IMAGE_NAME:master
+      - docker push $IMAGE_NAME:$CIRCLE_BRANCH
