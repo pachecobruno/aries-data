@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 # strip leading v for docker tags
 DOCKER_TAG=$(echo $CIRCLE_TAG | cut -c 2-)
