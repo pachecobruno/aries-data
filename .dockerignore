@@ -1,0 +1,14 @@
+node_modules
+coverage
+dist
+img
+.git*
+lib
+log
+test
+.babelrc
+.eslintrc
+package.json
+README.md
+circle.yml
+app.log
