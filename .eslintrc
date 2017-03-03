@@ -3,6 +3,7 @@
     "plugins": ["babel"],
     "parser": "babel-eslint",
     "rules": {
-      "indent": ["error", 4]
+      "indent": ["error", 4],
+      "no-underscore-dangle": 0
     }
 }
