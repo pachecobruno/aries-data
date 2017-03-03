@@ -1,4 +1,4 @@
-FROM astronomerio/aries:1.0.0
+FROM astronomerio/aries:1.0.1
 MAINTAINER astronomer <greg@astronomer.io>
 
 # Install node.js
