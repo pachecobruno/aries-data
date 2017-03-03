@@ -29,12 +29,7 @@ deployment:
     tag: /v[0-9]+(\.[0-9]+)*/
     owner: aries-data
     commands:
-      # strip leading v for docker tags
-      - DOCKER_TAG=$(echo $CIRCLE_TAG | cut -c 2-)
-      - docker tag $IMAGE_NAME:latest $IMAGE_NAME:$DOCKER_TAG
-      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker push $IMAGE_NAME:$DOCKER_TAG
-      - npm publish
+      - ./scripts/deploy.sh
   # deploy branches to docker hub with tag equal to branch name
   staging:
     branch: /.*/
