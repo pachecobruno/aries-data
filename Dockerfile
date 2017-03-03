@@ -6,6 +6,7 @@ ENV NPM_CONFIG_LOGLEVEL=info \
     NODE_VERSION=7.5.0
 
 RUN apk add --no-cache \
+        git \
         libstdc++ \
     && apk add --no-cache --virtual .build-deps \
         binutils-gold \
