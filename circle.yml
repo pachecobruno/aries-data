@@ -12,6 +12,7 @@ dependencies:
   override:
     - docker info
     - docker build --rm=false -t $IMAGE_NAME .
+    - docker build -f onbuild/Dockerfile --rm=false -t $IMAGE_NAME:onbuild onbuild
     - npm install
 
 test:
