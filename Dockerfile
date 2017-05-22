@@ -2,7 +2,7 @@ FROM astronomerio/aries:1.0.1
 MAINTAINER astronomer <greg@astronomer.io>
 
 # Install node.js
-ENV NODE_VERSION=6.9.2-r1
+ENV NODE_VERSION=6.9.5-r0
 
 RUN apk --update upgrade \
     && apk add --no-cache \
