@@ -65,7 +65,8 @@ function createFortinetTunnel(connection) {
         };
         var options = {
             detached: true,
-            env: (0, _lodash2.default)(env, _lodash4.default) };
+            env: (0, _lodash2.default)(env, _lodash4.default) // remove falsy values from env
+        };
         var target = '/usr/local/bin/forticlient';
         var process = spawn(target, args, options);
         process.on('exit', function (code) {
@@ -121,7 +122,8 @@ function createIPSecTunnel(connection) {
         };
         var options = {
             detached: true,
-            env: (0, _lodash2.default)(env, _lodash4.default) };
+            env: (0, _lodash2.default)(env, _lodash4.default) // remove falsey values from env
+        };
         var process = spawn(target, args, options);
         process.on('exit', function (code) {
             log.debug('strongswan exited with code: ' + code);
