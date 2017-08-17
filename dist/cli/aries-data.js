@@ -20,9 +20,9 @@ var argv = require('minimist')(process.argv.slice(2), {
 require('./execute').default(argv).then(function (output) {
     console.log(JSON.stringify(output));
     setTimeout(process.exit.bind(process, 0), 1000);
-})
+}
 // eslint-disable-next-line no-unused-vars
-.catch(function (err) {
+).catch(function (err) {
     console.log(JSON.stringify({}));
     setTimeout(process.exit.bind(process, 1), 1000);
 });

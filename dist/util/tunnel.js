@@ -9,13 +9,17 @@ exports.createIPSecTunnel = createIPSecTunnel;
 exports.createOpenVPNTunnel = createOpenVPNTunnel;
 exports.createTunnel = createTunnel;
 
-var _dns = require('dns');
-
-var _dns2 = _interopRequireDefault(_dns);
-
 var _child_process = require('child_process');
 
 var _child_process2 = _interopRequireDefault(_child_process);
+
+var _lodash = require('lodash.pickby');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _lodash3 = require('lodash.identity');
+
+var _lodash4 = _interopRequireDefault(_lodash3);
 
 var _logger = require('./logger');
 
@@ -26,35 +30,49 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var spawn = _child_process2.default.spawn;
 var log = (0, _logger2.default)(__filename);
 
-// Define standard tunnel types
+// Define standard tunnel codes
 var FORTINET = exports.FORTINET = 'forticlientsslvpn';
 var IPSEC = exports.IPSEC = 'ipsec';
 var OPENVPN = exports.OPENVPN = 'openvpn';
 
 /**
- * Spawns the tunnel by executing the appropriate package installed on the host
- * @param target the target program to spawn
- * @param args command line arguments to pass to target
- * @param env environment variables to make available to target
- * @param checkSuccess Function a function that accepts a single param and returns true or false
- * if the tunnel is open
+ * Maps an error code to a javascript Error
+ * @param code an integer exit code
+ * @return Error
+ */
+function fortinetErrorFromCode(code) {
+    if (code === 112) return new Error('Attempt to open tunnel to Fortinet host timed out');
+    if (code === 113) return new Error('Unable to resolve knownHost');
+    return new Error('Failed to open tunnel to Fortinet host. Exit code ' + code);
+}
+
+/**
+ * Creates a tunnel to a Fortigate appliance utilizing the forticlientsslvpn
+ * client.
+ * @param connection an object containing the details of the connection
  * @return Promise
  */
-function spawnTunnel(target, args, env, checkSuccess) {
-    var options = {
-        detached: true,
-        env: env
-    };
+function createFortinetTunnel(connection) {
     return new Promise(function (resolve, reject) {
+        var args = [];
+        var env = {
+            REMOTE_HOST: connection.remoteHost,
+            USERNAME: connection.username,
+            PASSWORD: connection.password,
+            TRUSTED_CERT: connection.trustedCert,
+            KNOWN_HOST: connection.knownHost,
+            TIMEOUT: connection.timeout
+        };
+        var options = {
+            detached: true,
+            env: (0, _lodash2.default)(env, _lodash4.default) // remove falsy values from env
+        };
+        var target = '/usr/local/bin/forticlient';
         var process = spawn(target, args, options);
-        process.stdout.on('data', function (data) {
-            checkSuccess(data).then(function (success) {
-                if (success) {
-                    resolve();
-                }
-            }).catch(function (err) {
-                reject(err);
-            });
+        process.on('exit', function (code) {
+            log.debug('forticlient exited with code: ' + code);
+            if (code === 0) return resolve();
+            return reject(fortinetErrorFromCode(code));
         });
         process.on('error', function (err) {
             reject(err);
@@ -63,90 +81,79 @@ function spawnTunnel(target, args, env, checkSuccess) {
 }
 
 /**
- * Creates a tunnel to a Fortigate appliance utilizing the forticlientsslvpn
- * client.
- * @param options an object containing the connection info
- * @return Promise
+ * Maps an error code to a javascript error
+ * @param code an integer exit code
+ * @return Error
  */
-function createFortinetTunnel(options) {
-    var args = [];
-    var env = {
-        VPNADDR: options.host,
-        VPNUSER: options.user,
-        VPNPASS: options.pass,
-        VPNTIMEOUT: options.timeout || 30
-    };
-    var target = '/usr/local/bin/forticlient';
-    // eslint-disable-next-line arrow-body-style
-    return spawnTunnel(target, args, env, function (data) {
-        // a forticlient tunnel is open once the followed is echoed to stdout
-        return new Promise(function (resolve, reject) {
-            // is data equal to the expected success message?
-            if (data.includes('STATUS::Tunnel running')) {
-                (function () {
-                    // now check dns on knownHost if it exists on options
-                    var knownHost = options.knownHost;
-                    if (knownHost) {
-                        (function () {
-                            var interval = setInterval(function () {
-                                _dns2.default.lookup(knownHost, function (err, address) {
-                                    log.debug('attempting to resolve DNS for host: ' + knownHost);
-                                    if (!err && address) {
-                                        // cleanup and resolve
-                                        log.debug('resolved DNS for ' + knownHost);
-                                        cleanup(); // eslint-disable-line no-use-before-define
-                                        resolve(true);
-                                    }
-                                });
-                            }, 500);
-                            var timeout = setTimeout(function () {
-                                // dns couldn't resolve. this is an error
-                                cleanup(); // eslint-disable-line no-use-before-define
-                                reject(new Error('Failed to resolve DNS'));
-                            }, 5000);
-                            var cleanup = function cleanup() {
-                                clearInterval(interval);
-                                clearTimeout(timeout);
-                                log.debug('cleaned up interval and timer');
-                            };
-                        })();
-                    } else {
-                        resolve(true); // no knownHost provided so assume succes
-                    }
-                })();
-            } else {
-                resolve(false); // not an error to log something else
-            }
+function ipsecErrorFromCode(code) {
+    if (code === 64) return new Error('Unable to find preshared key. psk must be defined');
+    if (code === 65) return new Error('Authentication failed. Check your preshared key');
+    if (code === 66) return new Error('Failed to establish tunnel. Tunnel definition was likely not agreed upon');
+    if (code === 67) return new Error('Failed to establish tunnel. Verify ike and esp algorithms');
+    if (code === 112) return new Error('Attempt to open tunnel to host timed out');
+    if (code === 113) return new Error('Unable to resolve knownHost');
+    return new Error('Failed to open tunnel to Fortinet host. Exit code ' + code);
+}
+
+/**
+ * Creates an IPSec connection to a host.
+ * Uses IKEV1, preshared key + xauth. Supports
+ * host-to-network ("roadwarrior") configurations.
+ * Site-to-Site tunnels are not supported
+ * @param connection an object containing the parameters of the
+ * tunnel
+ * @return Promise resolves when tunnel is open or fails
+ */
+function createIPSecTunnel(connection) {
+    return new Promise(function (resolve, reject) {
+        var target = '/usr/local/bin/strongswan';
+        var args = [];
+        var env = {
+            REMOTE_HOST: connection.remoteHost,
+            REMOTE_SUBNET: connection.remoteSubnet,
+            PSK: connection.psk,
+            XAUTH_USER: connection.xauthUser,
+            XAUTH_PASS: connection.xauthPass,
+            IKE: connection.ike,
+            ESP: connection.esp,
+            IKE_LIFETIME: connection.ikeLifetime,
+            TIMEOUT: connection.timeout,
+            KNOWN_HOST: connection.knownHost
+        };
+        var options = {
+            detached: true,
+            env: (0, _lodash2.default)(env, _lodash4.default) // remove falsey values from env
+        };
+        var process = spawn(target, args, options);
+        process.on('exit', function (code) {
+            log.debug('strongswan exited with code: ' + code);
+            if (code === 0) return resolve();
+            return reject(ipsecErrorFromCode(code));
+        });
+        process.on('error', function (err) {
+            reject(err);
         });
     });
 }
 
 // eslint-disable-next-line
-function createIPSecTunnel(options) {
-    // TODO
-    // 1) based on options, write out tunnel details to /etc/ipsec.conf and /etc/ipsec.secrets
-    // 2) start strongswan
-    throw new Error('Not yet supported');
-}
-
-// eslint-disable-next-line
-function createOpenVPNTunnel(vpnConnection) {
+function createOpenVPNTunnel(connection) {
     // TODO
     throw new Error('Not yet supported');
 }
 
 /**
- * Calls the appropriate method to open a vpn tunnel based on type
+ * Calls the appropriate method to open a vpn tunnel based on code
  * @param options Object tunnel specific options
  * @return Promise
  */
-function createTunnel(options) {
+function createTunnel(connection) {
     // determine the type of tunnel to open
-    var type = options.type;
-    if (type === FORTINET) {
-        return createFortinetTunnel(options);
-    } else if (type === OPENVPN) {
-        return createOpenVPNTunnel(options);
+    var code = connection.code;
+    if (code === FORTINET) {
+        return createFortinetTunnel(connection);
+    } else if (code === OPENVPN) {
+        return createOpenVPNTunnel(connection);
     }
-    return createIPSecTunnel(options);
+    return createIPSecTunnel(connection);
 }
