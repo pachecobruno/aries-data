@@ -5,20 +5,86 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.runTask = undefined;
 
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+var getConnection = function () {
+    var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(conn_id) {
+        var connectionURL, db, connection, extraJson;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+            while (1) {
+                switch (_context.prev = _context.next) {
+                    case 0:
+                        // TODO: support more than just the airflow connection table
+                        connectionURL = new _url.URL(process.env.ARIES_CONNECTION_STRING);
+
+                        if (connectionURL.protocol === 'postgresql') {
+                            connectionURL.protocol = 'postgres';
+                        }
+                        // connectionString like postgres://user:pass@host:port
+                        db = (0, _knex2.default)({
+                            client: 'pg',
+                            connection: connectionURL.toString()
+                        });
+                        _context.next = 5;
+                        return db.select().from('connection').where({
+                            conn_id: conn_id
+                        }).first();
+
+                    case 5:
+                        connection = _context.sent;
+
+                        if (connection) {
+                            _context.next = 8;
+                            break;
+                        }
+
+                        throw new Error('Connection ' + conn_id + ' does not exist');
+
+                    case 8:
+                        if (!connection.extra) {
+                            _context.next = 17;
+                            break;
+                        }
+
+                        _context.prev = 9;
+                        extraJson = JSON.parse(connection.extra);
+                        return _context.abrupt('return', _extends({}, connection, extraJson));
+
+                    case 14:
+                        _context.prev = 14;
+                        _context.t0 = _context['catch'](9);
+                        return _context.abrupt('return', connection);
+
+                    case 17:
+                        return _context.abrupt('return', connection);
+
+                    case 18:
+                    case 'end':
+                        return _context.stop();
+                }
+            }
+        }, _callee, this, [[9, 14]]);
+    }));
+
+    return function getConnection(_x) {
+        return _ref.apply(this, arguments);
+    };
+}();
 
 /**
  * Apply the cli arguments to the module.
  */
+
+
 var runTask = exports.runTask = function () {
-    var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(handler, args) {
+    var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(handler, args) {
         var start, output, _process$hrtime, _process$hrtime2, seconds, duration;
 
-        return regeneratorRuntime.wrap(function _callee$(_context) {
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
             while (1) {
-                switch (_context.prev = _context.next) {
+                switch (_context2.prev = _context2.next) {
                     case 0:
                         // Log out arguments.
                         log.debug('Executing task with ' + args.length + ' args.');
@@ -28,11 +94,11 @@ var runTask = exports.runTask = function () {
 
                         // Attempt to execute the task.
 
-                        _context.next = 4;
+                        _context2.next = 4;
                         return handler.onTask.apply(handler, _toConsumableArray(args));
 
                     case 4:
-                        output = _context.sent;
+                        output = _context2.sent;
 
 
                         // Get duration.
@@ -42,18 +108,18 @@ var runTask = exports.runTask = function () {
                         log.debug('Task executed in ' + duration + ' (' + seconds + ' sec).');
 
                         // Mimic legacy SWF behavior.
-                        return _context.abrupt('return', { input: output });
+                        return _context2.abrupt('return', { input: output });
 
                     case 9:
                     case 'end':
-                        return _context.stop();
+                        return _context2.stop();
                 }
             }
-        }, _callee, this);
+        }, _callee2, this);
     }));
 
-    return function runTask(_x, _x2) {
-        return _ref.apply(this, arguments);
+    return function runTask(_x2, _x3) {
+        return _ref2.apply(this, arguments);
     };
 }();
 
@@ -65,6 +131,12 @@ var runTask = exports.runTask = function () {
 exports.JSONparse = JSONparse;
 exports.decryptConfig = decryptConfig;
 exports.parse = parse;
+
+var _url = require('url');
+
+var _knex = require('knex');
+
+var _knex2 = _interopRequireDefault(_knex);
 
 var _moment = require('moment');
 
@@ -93,7 +165,9 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 var decryptor = _cryptobject2.default.decryptor;
 // Create logger.
 
-var log = (0, _logger2.default)(__filename);function JSONparse(str) {
+var log = (0, _logger2.default)(__filename);
+
+function JSONparse(str) {
     try {
         return JSON.parse(str);
     } catch (err) {
@@ -148,11 +222,11 @@ function decryptConfig(config) {
  */
 function parse(args) {
     // Destructure.
-    var _args2 = _slicedToArray(args, 4),
-        task = _args2[0],
-        config = _args2[1],
-        executionDate = _args2[2],
-        nextExecutionDate = _args2[3];
+    var _args3 = _slicedToArray(args, 4),
+        task = _args3[0],
+        config = _args3[1],
+        executionDate = _args3[2],
+        nextExecutionDate = _args3[3];
 
     // Return the parsed version.
 
@@ -165,17 +239,17 @@ function parse(args) {
  */
 
 exports.default = function () {
-    var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(_ref3) {
-        var repo = _ref3.repo,
-            args = _ref3._;
+    var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(_ref4) {
+        var repo = _ref4.repo,
+            args = _ref4._;
 
-        var pkg, Module, handler, parsedArgs, _parsedArgs, config, result;
+        var pkg, Module, handler, parsedArgs, _parsedArgs, config, connection, result;
 
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
             while (1) {
-                switch (_context2.prev = _context2.next) {
+                switch (_context3.prev = _context3.next) {
                     case 0:
-                        _context2.prev = 0;
+                        _context3.prev = 0;
 
                         // Require in the specified module.
                         // eslint-disable-next-line global-require, import/no-dynamic-require
@@ -197,55 +271,72 @@ exports.default = function () {
 
                         _parsedArgs = _slicedToArray(parsedArgs, 2), config = _parsedArgs[1];
 
-                        if (!(config.connection || {}).vpnConnection) {
-                            _context2.next = 10;
+                        // check for conn_id and populate it if exists
+
+                        if (!config.conn_id) {
+                            _context3.next = 13;
                             break;
                         }
 
-                        _context2.next = 10;
-                        return (0, _tunnel.createTunnel)(config.connection.vpnConnection);
+                        _context3.next = 10;
+                        return getConnection(config.conn_id);
 
                     case 10:
-                        _context2.next = 12;
+                        connection = _context3.sent;
+
+                        config.connection = connection;
+                        log.info('Acquired connection');
+
+                    case 13:
+                        if (!(config.connection || {}).vpnConnection) {
+                            _context3.next = 16;
+                            break;
+                        }
+
+                        _context3.next = 16;
+                        return (0, _tunnel.createTunnel)(config.connection.vpnConnection);
+
+                    case 16:
+                        _context3.next = 18;
                         return runTask(handler, parsedArgs);
 
-                    case 12:
-                        result = _context2.sent;
+                    case 18:
+                        result = _context3.sent;
 
 
                         // Log the result.
                         log.debug('Task result: ', result);
 
                         // Return the result.
-                        return _context2.abrupt('return', result);
+                        return _context3.abrupt('return', result);
 
-                    case 17:
-                        _context2.prev = 17;
-                        _context2.t0 = _context2['catch'](0);
+                    case 23:
+                        _context3.prev = 23;
+                        _context3.t0 = _context3['catch'](0);
 
                         // Log the error.
-                        log.error('Error executing task:', _context2.t0);
+                        log.error('Error executing task:', _context3.t0);
 
                         // Rethrow the error.
-                        throw _context2.t0;
+                        throw _context3.t0;
 
-                    case 21:
-                        _context2.prev = 21;
+                    case 27:
+                        _context3.prev = 27;
 
                         // Log out final message.
                         log.debug('Finished executing task.');
-                        return _context2.finish(21);
+                        return _context3.finish(27);
 
-                    case 24:
+                    case 30:
                     case 'end':
-                        return _context2.stop();
+                        return _context3.stop();
                 }
             }
-        }, _callee2, this, [[0, 17, 21, 24]]);
+        }, _callee3, this, [[0, 23, 27, 30]]);
     }));
 
-    function execute(_x4) {
-        return _ref2.apply(this, arguments);
+    function execute(_x5) {
+        return _ref3.apply(this, arguments);
     }
 
     return execute;
