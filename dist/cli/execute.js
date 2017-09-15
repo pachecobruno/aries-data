@@ -10,62 +10,59 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var getConnection = function () {
-    var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(conn_id) {
+    var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(connId) {
         var connectionURL, db, connection, extraJson;
         return regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
                 switch (_context.prev = _context.next) {
                     case 0:
                         // TODO: support more than just the airflow connection table
-                        connectionURL = new _url.URL(process.env.ARIES_CONNECTION_STRING);
-
-                        if (connectionURL.protocol === 'postgresql') {
-                            connectionURL.protocol = 'postgres';
-                        }
+                        connectionURL = _url2.default.parse(process.env.ARIES_CONNECTION_STRING);
                         // connectionString like postgres://user:pass@host:port
+
                         db = (0, _knex2.default)({
                             client: 'pg',
-                            connection: connectionURL.toString()
+                            connection: _url2.default.format(connectionURL)
                         });
-                        _context.next = 5;
+                        _context.next = 4;
                         return db.select().from('connection').where({
-                            conn_id: conn_id
+                            conn_id: connId
                         }).first();
 
-                    case 5:
+                    case 4:
                         connection = _context.sent;
 
                         if (connection) {
-                            _context.next = 8;
+                            _context.next = 7;
                             break;
                         }
 
-                        throw new Error('Connection ' + conn_id + ' does not exist');
+                        throw new Error('Connection ' + connId + ' does not exist');
 
-                    case 8:
+                    case 7:
                         if (!connection.extra) {
-                            _context.next = 17;
+                            _context.next = 16;
                             break;
                         }
 
-                        _context.prev = 9;
+                        _context.prev = 8;
                         extraJson = JSON.parse(connection.extra);
                         return _context.abrupt('return', _extends({}, connection, extraJson));
 
-                    case 14:
-                        _context.prev = 14;
-                        _context.t0 = _context['catch'](9);
+                    case 13:
+                        _context.prev = 13;
+                        _context.t0 = _context['catch'](8);
+                        return _context.abrupt('return', connection);
+
+                    case 16:
                         return _context.abrupt('return', connection);
 
                     case 17:
-                        return _context.abrupt('return', connection);
-
-                    case 18:
                     case 'end':
                         return _context.stop();
                 }
             }
-        }, _callee, this, [[9, 14]]);
+        }, _callee, this, [[8, 13]]);
     }));
 
     return function getConnection(_x) {
@@ -133,6 +130,8 @@ exports.decryptConfig = decryptConfig;
 exports.parse = parse;
 
 var _url = require('url');
+
+var _url2 = _interopRequireDefault(_url);
 
 var _knex = require('knex');
 
